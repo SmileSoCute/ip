@@ -1,4 +1,4 @@
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Pathfinder {
@@ -6,7 +6,7 @@ public class Pathfinder {
 
     public static void main(String[] args) {
         greetMessage();
-        List<Task> task = new List<>();
+        ArrayList<Task> tasks = new ArrayList<>();
         try (Scanner scanner = new Scanner(System.in)) {
             while (scanner.hasNextLine()) {
                 String input = scanner.nextLine().trim();
@@ -14,7 +14,7 @@ public class Pathfinder {
                     break;
                 }
                 try {
-                    handleCommand(input,task);
+                    handleCommand(input,tasks);
 
                 } catch (PathfinderException e) {
                     echoMessage(e.getMessage());
@@ -26,21 +26,25 @@ public class Pathfinder {
 
     }
 
-    private static void handleCommand(String input, List<Task> tasks) throws PathfinderException {
+    private static void handleCommand(String input, ArrayList<Task> tasks) throws PathfinderException {
         if (input.equals("list")) {
-            tasks.printList();
+            printList(tasks);
             return;
         }
         if  (input.equals("mark ") || input.startsWith("mark")) {
-            Task task = tasks.get(readTaskNumber(input,"mark"));
+            Task task = getTasks(tasks ,readTaskNumber(input,"mark"));
             task.doTask();
             echoMessage("Awesome sauce! I have marked this task up dude: \n" + task);
             return;
         }
         if  (input.equals("unmark ") || input.startsWith("unmark")) {
-            Task task = tasks.get(readTaskNumber(input,"unmark"));
+            Task task = getTasks(tasks, readTaskNumber(input,"unmark"));
             task.undoTask();
             echoMessage("Alright man, I have unmarked this task for you: \n" + task);
+            return;
+        }
+        if (input.equals("delete") ||  input.startsWith("delete ")) {
+            deleteTask(tasks, readTaskNumber(input,"delete"));
             return;
         }
 
@@ -83,7 +87,7 @@ public class Pathfinder {
         }
     }
 
-    private static void addDeadline(String input, List<Task> tasks) throws PathfinderException {
+    private static void addDeadline(String input, ArrayList<Task> tasks) throws PathfinderException {
         String details = readDescription(input, "deadline");
         int byIndex = details.indexOf(" /by ");
         if (byIndex < 0) {
@@ -94,10 +98,10 @@ public class Pathfinder {
         if (description.isEmpty() || by.isEmpty()) {
             throw new PathfinderException("Oopsies! A deadline needs a description and a '/by' value!");
         }
-        tasks.add(new DeadlineTask(description, by));
+        addTask(tasks, new DeadlineTask(description, by));
     }
 
-    private static void addEvent(String input, List<Task> tasks) throws PathfinderException {
+    private static void addEvent(String input, ArrayList<Task> tasks) throws PathfinderException {
         String details = readDescription(input, "event");
         int fromIndex = details.indexOf(" /from ");
         int toIndex = details.indexOf(" /to ");
@@ -112,7 +116,37 @@ public class Pathfinder {
             throw new PathfinderException("Oops! An event needs a description, '/from', and '/to' value!");
 
         }
-        tasks.add(new EventTask(description, from, to));
+        addTask(tasks, new EventTask(description, from, to));
+    }
+
+    private static void deleteTask(ArrayList<Task> tasks, int number) throws PathfinderException {
+        Task removed = getTasks(tasks, number);
+        tasks.remove(number - 1);
+        echoMessage("Got it my friend! I've removed this task:\n " + removed + "\n Alrighty currently you have " + tasks.size() + " task(s) in the list yay!");
+    }
+
+    private static Task getTasks(ArrayList<Task> tasks, int number) throws PathfinderException {
+        if (number < 1 || number > tasks.size()) {
+            throw new PathfinderException("Oopsies! That tasks number doesn't exist my friend!");
+        }
+        return tasks.get(number - 1);
+    }
+
+    private static void printList(ArrayList<Task> tasks) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+        }
+        echoMessage(sb.toString());
+    }
+
+    private static void addTask(ArrayList<Task> tasks, Task task) {
+        tasks.add(task);
+        System.out.println(SEPARATOR);
+        System.out.println("Okay! I've got it friend! I've added this task:");
+        System.out.println(" " + task);
+        System.out.println("Alrighty currently u have " + tasks.size() + " task(s) in the list yay!");
+        System.out.println(SEPARATOR);
     }
 
 
