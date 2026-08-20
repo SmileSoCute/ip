@@ -35,23 +35,32 @@ public class Pathfinder {
                 continue;
             }
 
-            if (input.startsWith("todo ")) {
-                list.add(new ToDoTask(input.substring(5)));
-            } else if  (input.startsWith("deadline ")) {
-                int byIndex = input.indexOf(" /by ");
-                String description = input.substring(9, byIndex);
-                String by = input.substring(byIndex + 5);
+            String command = input.substring(0, input.indexOf(" "));
+            Inputs taskType = Inputs.valueOf(command.toUpperCase());
+            switch (taskType) {
+                case TODO:
+                    list.add(new ToDoTask(input.substring(5)));
+                    break;
 
-                list.add(new DeadlineTask(description, by));
-            } else if (input.startsWith("event ")) {
-                int fromIndex = input.indexOf(" /from ");
-                int toIndex = input.indexOf(" /to ");
+                case DEADLINE:
+                    int byIndex = input.indexOf(" /by ");
+                    String deadlineDescription = input.substring(9, byIndex);
+                    String by = input.substring(byIndex + 5);
 
-                String description = input.substring(6, fromIndex);
-                String from = input.substring(fromIndex + 7, toIndex);
-                String to = input.substring(toIndex + 5);
+                    list.add(new DeadlineTask(deadlineDescription, by));
+                    break;
 
-                list.add(new EventTask(description, from, to));
+                case EVENT:
+                    int fromIndex = input.indexOf(" /from ");
+                    int toIndex = input.indexOf(" /to ");
+
+                    String eventDescription = input.substring(6, fromIndex);
+                    String from = input.substring(fromIndex + 7, toIndex);
+                    String to = input.substring(toIndex + 5);
+
+                    list.add(new EventTask(eventDescription, from, to));
+                    break;
+
             }
             input = scanner.nextLine();
 
