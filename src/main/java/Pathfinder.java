@@ -49,7 +49,7 @@ public class Pathfinder {
         }
 
         switch (readTaskType(input)) {
-            case TODO -> tasks.add(new ToDoTask(readDescription(input,"todo")));
+            case TODO -> addTask(tasks, new ToDoTask(readDescription(input,"todo")));
             case EVENT -> addEvent(input,tasks);
             case DEADLINE -> addDeadline(input,tasks);
         }
@@ -110,7 +110,7 @@ public class Pathfinder {
         }
 
         String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 7).trim();
+        String from = details.substring(fromIndex + 7, toIndex).trim();
         String to = details.substring(toIndex + 5).trim();
         if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
             throw new PathfinderException("Oops! An event needs a description, '/from', and '/to' value!");
