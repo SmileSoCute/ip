@@ -18,7 +18,9 @@ public class List<T extends Describable> {
         list[count] = task;
         count++;
         System.out.println(separator);
-        System.out.println("added : " + task.getDescription());
+        System.out.println("Okay! I've got it friend! I've added this task:");
+        System.out.println(" " + task);
+        System.out.println("Alrighty currently u have " + count + " task(s) in the list yay!");
         System.out.println(separator);
     }
 

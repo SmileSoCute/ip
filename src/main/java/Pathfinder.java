@@ -5,9 +5,11 @@ public class Pathfinder {
 
     public static void main(String[] args) {
         greetMessage();
+
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         List<Task> list = new List<>();
+
         while (true) {
             if (input.equals("bye")) {
                 break;
@@ -17,7 +19,7 @@ public class Pathfinder {
                 input = scanner.nextLine();
                 continue;
             }
-            if (input.startsWith("mark")) {
+            if (input.startsWith("mark ")) {
                 Task task = list.get(Integer.parseInt(input.substring(5)));
                 task.doTask();
                 echoMessage("Awesome sauce! I have marked this task up dude: \n" + task);
@@ -25,7 +27,7 @@ public class Pathfinder {
                 continue;
             }
 
-            if (input.startsWith("unmark")) {
+            if (input.startsWith("unmark ")) {
                 Task task = list.get(Integer.parseInt(input.substring(7)));
                 task.undoTask();
                 echoMessage("Alright man, I have unmarked this task for you: \n" + task);
@@ -33,9 +35,24 @@ public class Pathfinder {
                 continue;
             }
 
-            
+            if (input.startsWith("todo ")) {
+                list.add(new ToDoTask(input.substring(5)));
+            } else if  (input.startsWith("deadline ")) {
+                int byIndex = input.indexOf(" /by ");
+                String description = input.substring(9, byIndex);
+                String by = input.substring(byIndex + 5);
 
-            list.add(new Task(input));
+                list.add(new DeadlineTask(description, by));
+            } else if (input.startsWith("event ")) {
+                int fromIndex = input.indexOf(" /from ");
+                int toIndex = input.indexOf(" /to ");
+
+                String description = input.substring(6, fromIndex);
+                String from = input.substring(fromIndex + 7, toIndex);
+                String to = input.substring(toIndex + 5);
+
+                list.add(new EventTask(description, from, to));
+            }
             input = scanner.nextLine();
 
         }

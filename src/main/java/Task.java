@@ -16,7 +16,7 @@ public class Task implements Describable {
     }
     @Override
     public String toString() {
-        return (isDone ? "[X] " : "[] ") + description;
+        return (isDone ? "[X] " : "[ ] ") + description;
     }
 
     @Override
