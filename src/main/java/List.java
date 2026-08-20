@@ -1,7 +1,7 @@
 public class List<T extends Describable> {
     private T[] list;
     private int count = 0;
-    private final String separator = "____________________________________________________________";
+    private final String SEPARATOR = "____________________________________________________________";
 
 
     public List() {
@@ -17,11 +17,11 @@ public class List<T extends Describable> {
     public void add(T task) {
         list[count] = task;
         count++;
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("Okay! I've got it friend! I've added this task:");
         System.out.println(" " + task);
         System.out.println("Alrighty currently u have " + count + " task(s) in the list yay!");
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
     }
 
     @Override
@@ -34,10 +34,10 @@ public class List<T extends Describable> {
     }
 
     public void printList() {
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         String result = this.toString();
         System.out.print(result);
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
 
     }
 
