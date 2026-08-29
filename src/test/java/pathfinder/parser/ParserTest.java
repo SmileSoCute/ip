@@ -82,6 +82,24 @@ class ParserTest {
     }
 
     @Test
+    void parseFindKeyword_singleWord_returnsKeyword() throws PathfinderException {
+        assertEquals("book", Parser.parseFindKeyword("find book"));
+    }
+
+    @Test
+    void parseFindKeyword_multipleWords_returnsTrimmedKeyword() throws PathfinderException {
+        assertEquals("project meeting", Parser.parseFindKeyword("find   project meeting   "));
+    }
+
+    @Test
+    void parseFindKeyword_emptyKeyword_throwsPathfinderException() {
+        PathfinderException exception = assertThrows(PathfinderException.class,
+                () -> Parser.parseFindKeyword("find    "));
+        assertEquals("Oopsies! The find command needs a keyword, friend!",
+                exception.getMessage());
+    }
+
+    @Test
     void parseDeadline_validCommand_returnsDeadline() throws PathfinderException {
         DeadlineTask task = Parser.parseDeadline("deadline return book /by 2/12/2019 1800");
 

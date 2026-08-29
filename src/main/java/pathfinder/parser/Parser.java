@@ -51,6 +51,16 @@ public final class Parser {
         }
     }
 
+    /** Returns the required keyword following the find command. */
+    public static String parseFindKeyword(String input) throws PathfinderException {
+        String keyword = input.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new PathfinderException(
+                    "Oopsies! The find command needs a keyword, friend!");
+        }
+        return keyword;
+    }
+
     /** Creates a deadline from its description and /by value. */
     public static DeadlineTask parseDeadline(String input) throws PathfinderException {
         String details = parseDescription(input, "deadline");
