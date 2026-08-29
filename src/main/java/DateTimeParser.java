@@ -11,23 +11,40 @@ public final class DateTimeParser {
             .ofPattern("uuuu-MM-dd HHmm")
             .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter INPUT_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter INPUT_SLASH_DATE_TIME = DateTimeFormatter
+            .ofPattern("d/M/uuuu HHmm")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter INPUT_SLASH_DATE = DateTimeFormatter
+            .ofPattern("d/M/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter DISPLAY_DATE_TIME = DateTimeFormatter
             .ofPattern("MMM d uuuu h:mm a", Locale.ENGLISH);
 
     private DateTimeParser() {
     }
 
-    /** Parses user input as yyyy-MM-dd HHmm, or as yyyy-MM-dd at midnight. */
+    /** Parses supported ISO or day/month/year input, using midnight when time is omitted. */
     public static LocalDateTime parseInput(String text) throws PathfinderException {
         try {
             return LocalDateTime.parse(text, INPUT_DATE_TIME);
-        } catch (DateTimeParseException dateTimeException) {
-            try {
-                return LocalDate.parse(text, INPUT_DATE).atStartOfDay();
-            } catch (DateTimeParseException dateException) {
-                throw new PathfinderException(
-                        "Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.");
-            }
+        } catch (DateTimeParseException ignored) {
+            // Try the next supported format.
+        }
+        try {
+            return LocalDateTime.parse(text, INPUT_SLASH_DATE_TIME);
+        } catch (DateTimeParseException ignored) {
+            // Try a date without a time next.
+        }
+        try {
+            return LocalDate.parse(text, INPUT_DATE).atStartOfDay();
+        } catch (DateTimeParseException ignored) {
+            // Try the remaining supported format.
+        }
+        try {
+            return LocalDate.parse(text, INPUT_SLASH_DATE).atStartOfDay();
+        } catch (DateTimeParseException exception) {
+            throw new PathfinderException(
+                    "Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.");
         }
     }
 
