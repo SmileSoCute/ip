@@ -62,8 +62,8 @@ ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
 1. [T][X] read book
-2. [D][ ] return book (by: Sunday)
-3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+2. [D][ ] return book (by: Dec 2 2019 6:00 PM)
+3. [E][ ] project meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
@@ -82,8 +82,8 @@ ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
 1. [T][X] read book
-2. [D][ ] return book (by: Sunday)
-3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+2. [D][ ] return book (by: Dec 2 2019 6:00 PM)
+3. [E][ ] project meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
@@ -93,16 +93,16 @@ ____________________________________________________________
 
 ```text
 [T][X] read book
-[D][ ] return book (by: Sunday)
-[E][ ] project meeting (from: Mon 2pm to: 4pm)
+[D][ ] return book (by: Dec 2 2019 6:00 PM)
+[E][ ] project meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 ```
 
 ### Actual data
 
 ```text
 [T][X] read book
-[D][ ] return book (by: Sunday)
-[E][ ] project meeting (from: Mon 2pm to: 4pm)
+[D][ ] return book (by: Dec 2 2019 6:00 PM)
+[E][ ] project meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 ```
 
 ## PASS: Save a changed task list
@@ -443,7 +443,7 @@ Hello friend! My name is Pathfinder.
 What tasks can I do for you today?
 ____________________________________________________________
 ____________________________________________________________
-Heads up! I skipped 3 invalid saved task(s).
+Heads up! I skipped 4 invalid saved task(s).
 ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
@@ -464,7 +464,7 @@ Hello friend! My name is Pathfinder.
 What tasks can I do for you today?
 ____________________________________________________________
 ____________________________________________________________
-Heads up! I skipped 3 invalid saved task(s).
+Heads up! I skipped 4 invalid saved task(s).
 ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
@@ -481,6 +481,7 @@ not a task
 T | 2 | cmVhZCBib29r
 T | 0 | cmVhZCBib29r
 D | 0 | !!! | U3VuZGF5
+D | 0 | cmVhZCBib29r | bm90LWEtZGF0ZQ
 ```
 
 ### Actual data
@@ -490,9 +491,176 @@ not a task
 T | 2 | cmVhZCBib29r
 T | 0 | cmVhZCBib29r
 D | 0 | !!! | U3VuZGF5
+D | 0 | cmVhZCBib29r | bm90LWEtZGF0ZQ
 ```
 
-## PASS: Save text containing storage delimiters
+## PASS: Parse and display dates and times
+
+Aim: Verify date-only and date-time inputs become LocalDateTime values and display in a friendly format.
+
+### Console input
+
+```text
+deadline return book /by 2019-12-02 1800
+deadline date only /by 2019-12-02
+event meeting /from 2019-12-03 1400 /to 2019-12-03 1600
+list
+bye
+```
+
+### Expected output
+
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [D][ ] return book (by: Dec 2 2019 6:00 PM)
+Alrighty currently u have 1 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [D][ ] date only (by: Dec 2 2019 12:00 AM)
+Alrighty currently u have 2 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+Alrighty currently u have 3 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Here are your tasks:
+1. [D][ ] return book (by: Dec 2 2019 6:00 PM)
+2. [D][ ] date only (by: Dec 2 2019 12:00 AM)
+3. [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+### Actual output
+
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [D][ ] return book (by: Dec 2 2019 6:00 PM)
+Alrighty currently u have 1 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [D][ ] date only (by: Dec 2 2019 12:00 AM)
+Alrighty currently u have 2 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+Alrighty currently u have 3 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Here are your tasks:
+1. [D][ ] return book (by: Dec 2 2019 6:00 PM)
+2. [D][ ] date only (by: Dec 2 2019 12:00 AM)
+3. [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+### Expected data
+
+```text
+D | 0 | cmV0dXJuIGJvb2s | MjAxOS0xMi0wMlQxODowMDowMA
+D | 0 | ZGF0ZSBvbmx5 | MjAxOS0xMi0wMlQwMDowMDowMA
+E | 0 | bWVldGluZw | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
+```
+
+### Actual data
+
+```text
+D | 0 | cmV0dXJuIGJvb2s | MjAxOS0xMi0wMlQxODowMDowMA
+D | 0 | ZGF0ZSBvbmx5 | MjAxOS0xMi0wMlQwMDowMDowMA
+E | 0 | bWVldGluZw | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
+```
+
+## PASS: Invalid dates and event ranges
+
+Aim: Verify impossible dates, unsupported formats, and reversed event ranges are rejected.
+
+### Console input
+
+```text
+deadline impossible /by 2019-02-30 1800
+deadline wrong format /by 02/12/2019 1800
+event backwards /from 2019-12-03 1600 /to 2019-12-03 1400
+event invalid /from 2019-12-03 /to tomorrow
+bye
+```
+
+### Expected output
+
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+____________________________________________________________
+Oopsies! An event's '/to' time must be after its '/from' time.
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+### Actual output
+
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+____________________________________________________________
+Oopsies! An event's '/to' time must be after its '/from' time.
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+## PASS: Save descriptions containing storage delimiters
 
 Aim: Verify pipes in descriptions and date/time values cannot corrupt the saved file format.
 
@@ -500,8 +668,8 @@ Aim: Verify pipes in descriptions and date/time values cannot corrupt the saved 
 
 ```text
 todo read | book
-deadline return | book /by no idea | Sunday
-event project | meeting /from Mon | 2pm /to 4pm | later
+deadline return | book /by 2019-12-02 1800
+event project | meeting /from 2019-12-03 1400 /to 2019-12-03 1600
 bye
 ```
 
@@ -522,12 +690,12 @@ Alrighty currently u have 1 task(s) in the list yay!
 ____________________________________________________________
 ____________________________________________________________
 Okay! I've got it friend! I've added this task:
- [D][ ] return | book (by: no idea | Sunday)
+ [D][ ] return | book (by: Dec 2 2019 6:00 PM)
 Alrighty currently u have 2 task(s) in the list yay!
 ____________________________________________________________
 ____________________________________________________________
 Okay! I've got it friend! I've added this task:
- [E][ ] project | meeting (from: Mon | 2pm to: 4pm | later)
+ [E][ ] project | meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 Alrighty currently u have 3 task(s) in the list yay!
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
@@ -551,12 +719,12 @@ Alrighty currently u have 1 task(s) in the list yay!
 ____________________________________________________________
 ____________________________________________________________
 Okay! I've got it friend! I've added this task:
- [D][ ] return | book (by: no idea | Sunday)
+ [D][ ] return | book (by: Dec 2 2019 6:00 PM)
 Alrighty currently u have 2 task(s) in the list yay!
 ____________________________________________________________
 ____________________________________________________________
 Okay! I've got it friend! I've added this task:
- [E][ ] project | meeting (from: Mon | 2pm to: 4pm | later)
+ [E][ ] project | meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 Alrighty currently u have 3 task(s) in the list yay!
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
@@ -567,15 +735,15 @@ ____________________________________________________________
 
 ```text
 T | 0 | cmVhZCB8IGJvb2s
-D | 0 | cmV0dXJuIHwgYm9vaw | bm8gaWRlYSB8IFN1bmRheQ
-E | 0 | cHJvamVjdCB8IG1lZXRpbmc | TW9uIHwgMnBt | NHBtIHwgbGF0ZXI
+D | 0 | cmV0dXJuIHwgYm9vaw | MjAxOS0xMi0wMlQxODowMDowMA
+E | 0 | cHJvamVjdCB8IG1lZXRpbmc | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
 ```
 
 ### Actual data
 
 ```text
 T | 0 | cmVhZCB8IGJvb2s
-D | 0 | cmV0dXJuIHwgYm9vaw | bm8gaWRlYSB8IFN1bmRheQ
-E | 0 | cHJvamVjdCB8IG1lZXRpbmc | TW9uIHwgMnBt | NHBtIHwgbGF0ZXI
+D | 0 | cmV0dXJuIHwgYm9vaw | MjAxOS0xMi0wMlQxODowMDowMA
+E | 0 | cHJvamVjdCB8IG1lZXRpbmc | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
 ```
 

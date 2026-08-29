@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -121,10 +122,11 @@ public class Pathfinder {
         }
 
         String description = details.substring(0, byIndex).trim();
-        String by = details.substring(byIndex + 5).trim();
-        if (description.isEmpty() || by.isEmpty()) {
+        String byText = details.substring(byIndex + 5).trim();
+        if (description.isEmpty() || byText.isEmpty()) {
             throw new PathfinderException("Oopsies! A deadline needs both a description and a '/by' value.");
         }
+        LocalDateTime by = DateTimeParser.parseInput(byText);
         addTask(tasks, new DeadlineTask(description, by));
     }
 
@@ -139,11 +141,17 @@ public class Pathfinder {
         }
 
         String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 7, toIndex).trim();
-        String to = details.substring(toIndex + 5).trim();
-        if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
+        String fromText = details.substring(fromIndex + 7, toIndex).trim();
+        String toText = details.substring(toIndex + 5).trim();
+        if (description.isEmpty() || fromText.isEmpty() || toText.isEmpty()) {
             throw new PathfinderException(
                     "Oopsies! An event needs a description, a '/from' value, and a '/to' value.");
+        }
+        LocalDateTime from = DateTimeParser.parseInput(fromText);
+        LocalDateTime to = DateTimeParser.parseInput(toText);
+        if (!to.isAfter(from)) {
+            throw new PathfinderException(
+                    "Oopsies! An event's '/to' time must be after its '/from' time.");
         }
         addTask(tasks, new EventTask(description, from, to));
     }

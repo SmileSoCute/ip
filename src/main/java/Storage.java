@@ -4,6 +4,7 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -65,11 +66,13 @@ public class Storage {
         String status = task.isDone() ? "1" : "0";
         String description = encode(task.getDescription());
         if (task instanceof DeadlineTask deadline) {
-            return "D | " + status + " | " + description + " | " + encode(deadline.getBy());
+            return "D | " + status + " | " + description + " | "
+                    + encode(DateTimeParser.formatStored(deadline.getBy()));
         }
         if (task instanceof EventTask event) {
             return "E | " + status + " | " + description + " | "
-                    + encode(event.getFrom()) + " | " + encode(event.getTo());
+                    + encode(DateTimeParser.formatStored(event.getFrom())) + " | "
+                    + encode(DateTimeParser.formatStored(event.getTo()));
         }
         if (task instanceof ToDoTask) {
             return "T | " + status + " | " + description;
@@ -97,11 +100,14 @@ public class Storage {
         }
         case "D" -> {
             requireFieldCount(fields, 4);
-            yield new DeadlineTask(description, decodeRequired(fields[3]));
+            yield new DeadlineTask(description,
+                    DateTimeParser.parseStored(decodeRequired(fields[3])));
         }
         case "E" -> {
             requireFieldCount(fields, 5);
-            yield new EventTask(description, decodeRequired(fields[3]), decodeRequired(fields[4]));
+            yield new EventTask(description,
+                    DateTimeParser.parseStored(decodeRequired(fields[3])),
+                    DateTimeParser.parseStored(decodeRequired(fields[4])));
         }
         default -> throw new IllegalArgumentException("Unknown task type");
         };
@@ -141,7 +147,8 @@ public class Storage {
             throw new IllegalArgumentException("Invalid legacy deadline");
         }
         return new DeadlineTask(requireText(details.substring(0, byIndex)),
-                requireText(details.substring(byIndex + 6, details.length() - 1)));
+                DateTimeParser.parseLegacy(
+                        requireText(details.substring(byIndex + 6, details.length() - 1))));
     }
 
     /** Parses a legacy event line. */
@@ -151,9 +158,14 @@ public class Storage {
         if (fromIndex < 1 || toIndex <= fromIndex || !details.endsWith(")")) {
             throw new IllegalArgumentException("Invalid legacy event");
         }
-        return new EventTask(requireText(details.substring(0, fromIndex)),
-                requireText(details.substring(fromIndex + 8, toIndex)),
+        LocalDateTime from = DateTimeParser.parseLegacy(
+                requireText(details.substring(fromIndex + 8, toIndex)));
+        LocalDateTime to = DateTimeParser.parseLegacy(
                 requireText(details.substring(toIndex + 5, details.length() - 1)));
+        if (!to.isAfter(from)) {
+            throw new IllegalArgumentException("Legacy event end is not after its start");
+        }
+        return new EventTask(requireText(details.substring(0, fromIndex)), from, to);
     }
 
     /** Encodes task text so separators in user input cannot corrupt the file format. */
