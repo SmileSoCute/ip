@@ -3,37 +3,33 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Scanner;
 
 /** Runs the Pathfinder command-line chatbot. */
 public class Pathfinder {
-    private static final String SEPARATOR = "____________________________________________________________";
     private static final Storage STORAGE = new Storage(Path.of("data", "pathfinder.txt"));
+    private static final Ui UI = new Ui();
 
     /** Loads saved tasks and processes commands until input ends or the user enters bye. */
     public static void main(String[] args) {
-        greetMessage();
+        UI.showGreeting();
         ArrayList<Task> tasks = loadTasksSafely();
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (scanner.hasNextLine()) {
-                String input = scanner.nextLine().trim();
-                if (input.equalsIgnoreCase("bye")) {
-                    break;
-                }
+        while (UI.hasNextInput()) {
+            String input = UI.readInput();
+            if (input.equalsIgnoreCase("bye")) {
+                break;
+            }
 
-                try {
-                    handleCommand(input, tasks);
-                } catch (PathfinderException exception) {
-                    echoMessage(exception.getMessage());
-                } catch (IOException exception) {
-                    echoMessage("Oopsies! I couldn't save your tasks. Your latest change was undone.");
-                }
+            try {
+                handleCommand(input, tasks);
+            } catch (PathfinderException exception) {
+                UI.showMessage(exception.getMessage());
+            } catch (IOException exception) {
+                UI.showMessage("Oopsies! I couldn't save your tasks. Your latest change was undone.");
             }
         }
 
-        System.out.println("Bye bye! Hope to see you around soon!");
-        System.out.println(SEPARATOR);
+        UI.showGoodbye();
     }
 
     /** Loads valid saved tasks without allowing storage problems to stop startup. */
@@ -41,12 +37,12 @@ public class Pathfinder {
         try {
             ArrayList<Task> tasks = STORAGE.load();
             if (STORAGE.getSkippedLineCount() > 0) {
-                echoMessage("Heads up! I skipped " + STORAGE.getSkippedLineCount()
+                UI.showMessage("Heads up! I skipped " + STORAGE.getSkippedLineCount()
                         + " invalid saved task(s).");
             }
             return tasks;
         } catch (IOException exception) {
-            echoMessage("Oopsies! I couldn't read your saved tasks, so I started with an empty list.");
+            UI.showMessage("Oopsies! I couldn't read your saved tasks, so I started with an empty list.");
             return new ArrayList<>();
         }
     }
@@ -171,7 +167,7 @@ public class Pathfinder {
             task.undoTask();
             throw exception;
         }
-        echoMessage("Awesome sauce! I have marked this task up dude:\n" + task);
+        UI.showMessage("Awesome sauce! I have marked this task up dude:\n" + task);
     }
 
     /** Unmarks a task and restores its old status if saving fails. */
@@ -189,7 +185,7 @@ public class Pathfinder {
             task.doTask();
             throw exception;
         }
-        echoMessage("Alright man, I have unmarked this task for you:\n" + task);
+        UI.showMessage("Alright man, I have unmarked this task for you:\n" + task);
     }
 
     /** Deletes a task and puts it back if saving fails. */
@@ -203,7 +199,7 @@ public class Pathfinder {
             tasks.add(number - 1, removed);
             throw exception;
         }
-        echoMessage("Got it my friend! I've removed this task:\n " + removed
+        UI.showMessage("Got it my friend! I've removed this task:\n " + removed
                 + "\n Alrighty currently you have " + tasks.size() + " task(s) in the list yay!");
     }
 
@@ -218,7 +214,7 @@ public class Pathfinder {
     /** Displays all tasks, or a clear message when the list is empty. */
     private static void printList(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
-            echoMessage("Your task list is empty, friend!");
+            UI.showMessage("Your task list is empty, friend!");
             return;
         }
 
@@ -229,7 +225,7 @@ public class Pathfinder {
                 result.append("\n");
             }
         }
-        echoMessage(result.toString());
+        UI.showMessage(result.toString());
     }
 
     /** Adds a task and removes it again if saving fails. */
@@ -242,29 +238,6 @@ public class Pathfinder {
             throw exception;
         }
 
-        System.out.println(SEPARATOR);
-        System.out.println("Okay! I've got it friend! I've added this task:");
-        System.out.println(" " + task);
-        System.out.println("Alrighty currently u have " + tasks.size() + " task(s) in the list yay!");
-        System.out.println(SEPARATOR);
-    }
-
-    /** Prints a response between separator lines. */
-    public static void echoMessage(String message) {
-        System.out.println(SEPARATOR);
-        System.out.println(message);
-        System.out.println(SEPARATOR);
-    }
-
-    /** Prints Pathfinder's banner and greeting. */
-    public static void greetMessage() {
-        String banner = "/================\\\n"
-                + "|   Pathfinder   |\n"
-                + "\\================/\n";
-        System.out.println(SEPARATOR);
-        System.out.print(banner);
-        System.out.println("Hello friend! My name is Pathfinder.");
-        System.out.println("What tasks can I do for you today?");
-        System.out.println(SEPARATOR);
+        UI.showTaskAdded(task, tasks.size());
     }
 }
