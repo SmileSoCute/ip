@@ -496,12 +496,12 @@ D | 0 | cmVhZCBib29r | bm90LWEtZGF0ZQ
 
 ## PASS: Parse and display dates and times
 
-Aim: Verify date-only and date-time inputs become LocalDateTime values and display in a friendly format.
+Aim: Verify ISO and day/month/year inputs become LocalDateTime values and display in a friendly format.
 
 ### Console input
 
 ```text
-deadline return book /by 2019-12-02 1800
+deadline return book /by 2/12/2019 1800
 deadline date only /by 2019-12-02
 event meeting /from 2019-12-03 1400 /to 2019-12-03 1600
 list
@@ -601,8 +601,8 @@ Aim: Verify impossible dates, unsupported formats, and reversed event ranges are
 ### Console input
 
 ```text
-deadline impossible /by 2019-02-30 1800
-deadline wrong format /by 02/12/2019 1800
+deadline impossible /by 30/2/2019 1800
+deadline wrong format /by 12-02-2019 1800
 event backwards /from 2019-12-03 1600 /to 2019-12-03 1400
 event invalid /from 2019-12-03 /to tomorrow
 bye
@@ -619,16 +619,16 @@ Hello friend! My name is Pathfinder.
 What tasks can I do for you today?
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! An event's '/to' time must be after its '/from' time.
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
@@ -645,16 +645,16 @@ Hello friend! My name is Pathfinder.
 What tasks can I do for you today?
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! An event's '/to' time must be after its '/from' time.
 ____________________________________________________________
 ____________________________________________________________
-Oopsies! Use yyyy-MM-dd HHmm (or yyyy-MM-dd) for dates and times.
+Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
