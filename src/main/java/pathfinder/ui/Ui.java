@@ -10,17 +10,25 @@ public class Ui {
 
     private final Scanner scanner;
 
-    /** Creates a UI connected to the standard console input. */
+    /** Creates a UI connected to standard console input and output. */
     public Ui() {
         scanner = new Scanner(System.in);
     }
 
-    /** Returns whether another line of console input is available. */
+    /**
+     * Returns whether another line of console input is available.
+     *
+     * @return {@code true} if another line can be read, otherwise {@code false}
+     */
     public boolean hasNextInput() {
         return scanner.hasNextLine();
     }
 
-    /** Reads and trims the next line of console input. */
+    /**
+     * Reads and trims the next line of console input.
+     *
+     * @return trimmed input line
+     */
     public String readInput() {
         return scanner.nextLine().trim();
     }
@@ -37,14 +45,23 @@ public class Ui {
         System.out.println(SEPARATOR);
     }
 
-    /** Displays one response between separator lines. */
+    /**
+     * Displays one response between separator lines.
+     *
+     * @param message response to display
+     */
     public void showMessage(String message) {
         System.out.println(SEPARATOR);
         System.out.println(message);
         System.out.println(SEPARATOR);
     }
 
-    /** Displays the task that was added and the new number of tasks. */
+    /**
+     * Displays the task that was added and the new number of tasks.
+     *
+     * @param task newly added task
+     * @param taskCount number of tasks after the addition
+     */
     public void showTaskAdded(Task task, int taskCount) {
         System.out.println(SEPARATOR);
         System.out.println("Okay! I've got it friend! I've added this task:");
