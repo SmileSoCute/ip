@@ -433,3 +433,58 @@ T | 0 | cmVhZCB8IGJvb2s
 D | 0 | cmV0dXJuIHwgYm9vaw | MjAxOS0xMi0wMlQxODowMDowMA
 E | 0 | cHJvamVjdCB8IG1lZXRpbmc | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
 ```
+
+## Find tasks by description
+
+**Aim:** Verify that find searches descriptions case-insensitively, numbers only matching tasks, handles no matches and missing keywords, and does not change saved data.
+
+**Initial data:**
+```text
+[T][X] read book
+[D][ ] Return BOOK (by: Dec 2 2019 6:00 PM)
+[E][ ] team meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+```
+
+**Input:**
+```text
+find BOOK
+find meeting
+find missing
+find
+bye
+```
+
+**Expected output:**
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! Here are the matching tasks I found:
+1. [T][X] read book
+2. [D][ ] Return BOOK (by: Dec 2 2019 6:00 PM)
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! Here are the matching tasks I found:
+1. [E][ ] team meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+____________________________________________________________
+____________________________________________________________
+Oopsies! I couldn't find any tasks containing "missing".
+____________________________________________________________
+____________________________________________________________
+Oopsies! The find command needs a keyword, friend!
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+**Expected data:**
+```text
+[T][X] read book
+[D][ ] Return BOOK (by: Dec 2 2019 6:00 PM)
+[E][ ] team meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+```

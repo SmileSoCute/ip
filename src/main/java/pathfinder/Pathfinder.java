@@ -3,6 +3,7 @@ package pathfinder;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import pathfinder.exception.PathfinderException;
 import pathfinder.parser.Parser;
@@ -85,6 +86,7 @@ public class Pathfinder {
             case "mark" -> markTask(tasks, Parser.parseTaskNumber(input, "mark"));
             case "unmark" -> unmarkTask(tasks, Parser.parseTaskNumber(input, "unmark"));
             case "delete" -> deleteTask(tasks, Parser.parseTaskNumber(input, "delete"));
+            case "find" -> findTasks(tasks, Parser.parseFindKeyword(input));
             case "todo" -> addTask(tasks, Parser.parseTodo(input));
             case "deadline" -> addTask(tasks, Parser.parseDeadline(input));
             case "event" -> addTask(tasks, Parser.parseEvent(input));
@@ -199,6 +201,36 @@ public class Pathfinder {
                 result.append("\n");
             }
         }
+        UI.showMessage(result.toString());
+    }
+
+    /**
+     * Displays tasks whose descriptions contain the keyword, ignoring case.
+     *
+     * @param tasks Tasks to search.
+     * @param keyword Keyword to find in task descriptions.
+     */
+    private static void findTasks(ArrayList<Task> tasks, String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        StringBuilder result = new StringBuilder(
+                "Alrighty friend! Here are the matching tasks I found:\n");
+        int matchCount = 0;
+
+        for (Task task : tasks) {
+            String description = task.getDescription().toLowerCase(Locale.ROOT);
+            if (description.contains(normalizedKeyword)) {
+                matchCount++;
+                result.append(matchCount).append(". ").append(task).append("\n");
+            }
+        }
+
+        if (matchCount == 0) {
+            UI.showMessage("Oopsies! I couldn't find any tasks containing \""
+                    + keyword + "\".");
+            return;
+        }
+
+        result.setLength(result.length() - 1);
         UI.showMessage(result.toString());
     }
 

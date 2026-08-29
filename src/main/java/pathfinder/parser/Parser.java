@@ -78,6 +78,22 @@ public final class Parser {
     }
 
     /**
+     * Returns the required keyword following the find command.
+     *
+     * @param input Complete find command.
+     * @return The keyword to search for.
+     * @throws PathfinderException If the keyword is missing.
+     */
+    public static String parseFindKeyword(String input) throws PathfinderException {
+        String keyword = input.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new PathfinderException(
+                    "Oopsies! The find command needs a keyword, friend!");
+        }
+        return keyword;
+    }
+
+    /**
      * Creates a deadline from its description and {@code /by} value.
      *
      * @param input complete deadline command
