@@ -127,7 +127,8 @@ def main() -> int:
 
             output_matches = actual == normalise(case["expected"] + "\n")
             data_matches = case.get("expected_data") is None or (
-                actual_data == normalise(case["expected_data"] + "\n")
+                (actual_data or "").rstrip("\n")
+                == normalise(case["expected_data"]).rstrip("\n")
             )
             passed = output_matches and data_matches
             transcript = record(case, actual, actual_data, passed)

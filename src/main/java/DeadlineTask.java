@@ -6,6 +6,11 @@ public class DeadlineTask extends Task {
         this.by = by;
     }
 
+    /** Returns the deadline value supplied by the user. */
+    public String getBy() {
+        return by;
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + this.by + ")";

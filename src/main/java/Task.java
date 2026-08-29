@@ -14,6 +14,11 @@ public class Task implements Describable {
     public void undoTask() {
         this.isDone = false;
     }
+
+    /** Returns whether this task has been completed. */
+    public boolean isDone() {
+        return isDone;
+    }
     @Override
     public String toString() {
         return (isDone ? "[X] " : "[ ] ") + description;
