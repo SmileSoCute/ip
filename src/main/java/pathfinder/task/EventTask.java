@@ -1,4 +1,8 @@
+package pathfinder.task;
+
 import java.time.LocalDateTime;
+
+import pathfinder.util.DateTimeParser;
 
 public class EventTask extends Task {
     private LocalDateTime from;

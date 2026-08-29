@@ -1,3 +1,5 @@
+package pathfinder.task;
+
 public class Task implements Describable {
     private String description;
     private boolean isDone;

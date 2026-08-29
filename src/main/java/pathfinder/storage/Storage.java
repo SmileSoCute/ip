@@ -1,3 +1,5 @@
+package pathfinder.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -7,6 +9,12 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+
+import pathfinder.task.DeadlineTask;
+import pathfinder.task.EventTask;
+import pathfinder.task.Task;
+import pathfinder.task.ToDoTask;
+import pathfinder.util.DateTimeParser;
 
 /** Saves and loads Pathfinder tasks from a fixed data file. */
 public class Storage {

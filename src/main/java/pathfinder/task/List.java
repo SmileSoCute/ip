@@ -1,3 +1,5 @@
+package pathfinder.task;
+
 public class List<T extends Describable> {
     private T[] list;
     private int count = 0;

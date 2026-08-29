@@ -2,7 +2,7 @@
 
 ## Configuration
 
-- Main class: `Pathfinder`
+- Main class: `pathfinder.Pathfinder`
 - Java version: 25
 
 ## Greeting and immediate exit

@@ -1,6 +1,14 @@
+package pathfinder;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+
+import pathfinder.exception.PathfinderException;
+import pathfinder.parser.Parser;
+import pathfinder.storage.Storage;
+import pathfinder.task.Task;
+import pathfinder.ui.Ui;
 
 /** Runs the Pathfinder command-line chatbot. */
 public class Pathfinder {

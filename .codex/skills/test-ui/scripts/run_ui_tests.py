@@ -34,6 +34,15 @@ def parse_cases(plan_path: Path) -> list[dict[str, str]]:
     return cases
 
 
+def parse_main_class(plan_path: Path) -> str:
+    """Return the fully qualified main class recorded in the test plan."""
+    plan = plan_path.read_text(encoding="utf-8")
+    match = re.search(r"^- Main class: `([^`]+)`$", plan, re.MULTILINE)
+    if not match:
+        raise ValueError("No main class found in test/ui-test-plan.md.")
+    return match.group(1)
+
+
 def find_java_home(requested_home: str | None) -> Path:
     """Find Java 25, prioritising an explicit path over environment settings."""
     candidates = [Path(requested_home)] if requested_home else []
@@ -85,9 +94,11 @@ def main() -> int:
     arguments = parser.parse_args()
     root = Path.cwd()
     session_path = root / "test" / "ui-test-session.md"
-    cases = parse_cases(root / "test" / "ui-test-plan.md")
+    plan_path = root / "test" / "ui-test-plan.md"
+    cases = parse_cases(plan_path)
+    main_class = parse_main_class(plan_path)
     java_home = find_java_home(arguments.java_home)
-    sources = sorted((root / "src" / "main" / "java").glob("*.java"))
+    sources = sorted((root / "src" / "main" / "java").rglob("*.java"))
 
     with tempfile.TemporaryDirectory(prefix="pathfinder-ui-tests-") as classes:
         compilation = subprocess.run(
@@ -113,7 +124,7 @@ def main() -> int:
 
                 try:
                     result = subprocess.run(
-                        [tool(java_home, "java"), "-cp", classes, "Pathfinder"],
+                        [tool(java_home, "java"), "-cp", classes, main_class],
                         input=case["input"] + "\n", text=True, capture_output=True,
                         timeout=arguments.timeout, check=False, cwd=case_path,
                     )

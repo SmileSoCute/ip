@@ -1,4 +1,8 @@
+package pathfinder.ui;
+
 import java.util.Scanner;
+
+import pathfinder.task.Task;
 
 /** Handles all console input and output for Pathfinder. */
 public class Ui {

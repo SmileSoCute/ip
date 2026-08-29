@@ -1,5 +1,13 @@
+package pathfinder.parser;
+
 import java.time.LocalDateTime;
 import java.util.Locale;
+
+import pathfinder.exception.PathfinderException;
+import pathfinder.task.DeadlineTask;
+import pathfinder.task.EventTask;
+import pathfinder.task.ToDoTask;
+import pathfinder.util.DateTimeParser;
 
 /** Interprets raw user input and validates command arguments. */
 public final class Parser {
