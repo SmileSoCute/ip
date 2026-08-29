@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import pathfinder.exception.PathfinderException;
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
-import pathfinder.task.ToDoTask;
+import pathfinder.task.TodoTask;
 
 /** Tests Pathfinder's command interpretation and validation rules. */
 class ParserTest {
@@ -48,7 +48,7 @@ class ParserTest {
 
     @Test
     void parseTodo_validDescription_returnsTodo() throws PathfinderException {
-        ToDoTask task = Parser.parseTodo("todo read book");
+        TodoTask task = Parser.parseTodo("todo read book");
 
         assertEquals("read book", task.getDescription());
         assertFalse(task.isDone());

@@ -6,7 +6,7 @@ import java.util.Locale;
 import pathfinder.exception.PathfinderException;
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
-import pathfinder.task.ToDoTask;
+import pathfinder.task.TodoTask;
 import pathfinder.util.DateTimeParser;
 
 /** Interprets raw user input and validates command arguments. */
@@ -32,8 +32,8 @@ public final class Parser {
     }
 
     /** Creates a todo from the required text following its command word. */
-    public static ToDoTask parseTodo(String input) throws PathfinderException {
-        return new ToDoTask(parseDescription(input, "todo"));
+    public static TodoTask parseTodo(String input) throws PathfinderException {
+        return new TodoTask(parseDescription(input, "todo"));
     }
 
     /** Parses a positive task number after mark, unmark, or delete. */

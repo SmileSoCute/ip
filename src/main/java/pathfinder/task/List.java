@@ -1,23 +1,31 @@
 package pathfinder.task;
 
+/**
+ * Stores up to 100 describable items and renders them as a numbered list.
+ *
+ * @param <T> type of item stored in the list.
+ */
 public class List<T extends Describable> {
-    private T[] list;
+    private static final String SEPARATOR = "____________________________________________________________";
+
+    private final T[] items;
     private int count = 0;
-    private final String SEPARATOR = "____________________________________________________________";
 
-
+    /** Creates an empty fixed-capacity list. */
     public List() {
         @SuppressWarnings("unchecked")
-        T[] temp = (T[]) new Describable[100];
-        this.list = temp;
+        T[] emptyItems = (T[]) new Describable[100];
+        this.items = emptyItems;
     }
 
+    /** Returns the item identified by its one-based index. */
     public T get(int index) {
-        return this.list[index - 1];
+        return this.items[index - 1];
     }
 
+    /** Adds an item and displays confirmation on the console. */
     public void add(T task) {
-        list[count] = task;
+        items[count] = task;
         count++;
         System.out.println(SEPARATOR);
         System.out.println("Okay! I've got it friend! I've added this task:");
@@ -30,18 +38,16 @@ public class List<T extends Describable> {
     public String toString() {
         String result = "";
         for (int i = 0; i < count; i++) {
-            result += (i + 1) + ". " + this.list[i] + "\n";
+            result += (i + 1) + ". " + this.items[i] + "\n";
         }
         return result;
     }
 
+    /** Displays the numbered list between separator lines. */
     public void printList() {
         System.out.println(SEPARATOR);
         String result = this.toString();
         System.out.print(result);
         System.out.println(SEPARATOR);
-
     }
-
-
 }

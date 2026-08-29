@@ -59,18 +59,19 @@ public class Pathfinder {
         String command = Parser.parseCommandWord(input);
 
         switch (command) {
-        case "list" -> {
-            Parser.requireNoArguments(input, "list");
-            printList(tasks);
-        }
-        case "mark" -> markTask(tasks, Parser.parseTaskNumber(input, "mark"));
-        case "unmark" -> unmarkTask(tasks, Parser.parseTaskNumber(input, "unmark"));
-        case "delete" -> deleteTask(tasks, Parser.parseTaskNumber(input, "delete"));
-        case "todo" -> addTask(tasks, Parser.parseTodo(input));
-        case "deadline" -> addTask(tasks, Parser.parseDeadline(input));
-        case "event" -> addTask(tasks, Parser.parseEvent(input));
-        case "bye" -> throw new PathfinderException("Oopsies! The bye command does not take extra words.");
-        default -> throw new PathfinderException("Oopsies! I don't understand that command.");
+            case "list" -> {
+                Parser.requireNoArguments(input, "list");
+                printList(tasks);
+            }
+            case "mark" -> markTask(tasks, Parser.parseTaskNumber(input, "mark"));
+            case "unmark" -> unmarkTask(tasks, Parser.parseTaskNumber(input, "unmark"));
+            case "delete" -> deleteTask(tasks, Parser.parseTaskNumber(input, "delete"));
+            case "todo" -> addTask(tasks, Parser.parseTodo(input));
+            case "deadline" -> addTask(tasks, Parser.parseDeadline(input));
+            case "event" -> addTask(tasks, Parser.parseEvent(input));
+            case "bye" -> throw new PathfinderException(
+                    "Oopsies! The bye command does not take extra words.");
+            default -> throw new PathfinderException("Oopsies! I don't understand that command.");
         }
     }
 
