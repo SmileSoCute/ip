@@ -1,18 +1,21 @@
-public class DeadlineTask extends Task {
-    private String by;
+import java.time.LocalDateTime;
 
-    public DeadlineTask(String description, String by) {
+public class DeadlineTask extends Task {
+    private LocalDateTime by;
+
+    public DeadlineTask(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
 
-    /** Returns the deadline value supplied by the user. */
-    public String getBy() {
+    /** Returns the deadline date and time. */
+    public LocalDateTime getBy() {
         return by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by + ")";
+        return "[D]" + super.toString() + " (by: "
+                + DateTimeParser.formatDisplay(by) + ")";
     }
 }
