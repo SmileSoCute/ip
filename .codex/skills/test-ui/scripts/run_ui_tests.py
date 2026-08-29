@@ -13,8 +13,10 @@ from pathlib import Path
 
 CASE = re.compile(
     r"^## (?P<name>[^\r\n]+)\r?\n\r?\n\*\*Aim:\*\* (?P<aim>.+?)\r?\n\r?\n"
+    r"(?:\*\*Initial data:\*\*\r?\n```text\r?\n(?P<initial_data>.*?)\r?\n```\r?\n\r?\n)?"
     r"\*\*Input:\*\*\r?\n```text\r?\n(?P<input>.*?)\r?\n```\r?\n\r?\n"
-    r"\*\*Expected output:\*\*\r?\n```text\r?\n(?P<expected>.*?)\r?\n```",
+    r"\*\*Expected output:\*\*\r?\n```text\r?\n(?P<expected>.*?)\r?\n```"
+    r"(?:\r?\n\r?\n\*\*Expected data:\*\*\r?\n```text\r?\n(?P<expected_data>.*?)\r?\n```)?",
     re.DOTALL | re.MULTILINE,
 )
 
@@ -53,15 +55,21 @@ def tool(java_home: Path, name: str) -> str:
     return str(path)
 
 
-def record(case: dict[str, str], actual: str, passed: bool) -> str:
+def record(case: dict[str, str], actual: str, actual_data: str | None, passed: bool) -> str:
     """Format one complete, human-readable console session record."""
     status = "PASS" if passed else "FAIL"
-    return (
+    transcript = (
         f"## {status}: {case['name']}\n\nAim: {case['aim']}\n\n"
         f"### Console input\n\n```text\n{case['input']}\n```\n\n"
         f"### Expected output\n\n```text\n{case['expected']}\n```\n\n"
         f"### Actual output\n\n```text\n{actual}```\n\n"
     )
+    if case.get("expected_data") is not None:
+        transcript += (
+            f"### Expected data\n\n```text\n{case['expected_data']}\n```\n\n"
+            f"### Actual data\n\n```text\n{actual_data or ''}```\n\n"
+        )
+    return transcript
 
 
 def write_session(path: Path, records: list[str]) -> None:
@@ -96,18 +104,33 @@ def main() -> int:
 
         records: list[str] = []
         for case in cases:
-            try:
-                result = subprocess.run(
-                    [tool(java_home, "java"), "-cp", classes, "Pathfinder"],
-                    input=case["input"] + "\n", text=True, capture_output=True,
-                    timeout=arguments.timeout, check=False,
-                )
-                actual = normalise(result.stdout + result.stderr)
-            except subprocess.TimeoutExpired as error:
-                actual = normalise((error.stdout or "") + "\n[TIMED OUT]\n")
+            with tempfile.TemporaryDirectory(prefix="pathfinder-ui-case-") as case_dir:
+                case_path = Path(case_dir)
+                if case.get("initial_data") is not None:
+                    data_path = case_path / "data" / "pathfinder.txt"
+                    data_path.parent.mkdir(parents=True)
+                    data_path.write_text(case["initial_data"] + "\n", encoding="utf-8")
 
-            passed = actual == normalise(case["expected"] + "\n")
-            transcript = record(case, actual, passed)
+                try:
+                    result = subprocess.run(
+                        [tool(java_home, "java"), "-cp", classes, "Pathfinder"],
+                        input=case["input"] + "\n", text=True, capture_output=True,
+                        timeout=arguments.timeout, check=False, cwd=case_path,
+                    )
+                    actual = normalise(result.stdout + result.stderr)
+                except subprocess.TimeoutExpired as error:
+                    actual = normalise((error.stdout or "") + "\n[TIMED OUT]\n")
+
+                saved_path = case_path / "data" / "pathfinder.txt"
+                actual_data = normalise(saved_path.read_text(encoding="utf-8")) \
+                    if saved_path.exists() else None
+
+            output_matches = actual == normalise(case["expected"] + "\n")
+            data_matches = case.get("expected_data") is None or (
+                actual_data == normalise(case["expected_data"] + "\n")
+            )
+            passed = output_matches and data_matches
+            transcript = record(case, actual, actual_data, passed)
             records.append(transcript)
             write_session(session_path, records)
             print(transcript)

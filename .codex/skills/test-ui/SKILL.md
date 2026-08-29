@@ -16,6 +16,11 @@ Read `test/ui-test-plan.md` before testing. Each case must use this structure:
 
 **Aim:** <what the test verifies>
 
+**Initial data:**
+```text
+<optional contents of data/pathfinder.txt before the test>
+```
+
 **Input:**
 ```text
 <one command per line>
@@ -25,7 +30,14 @@ Read `test/ui-test-plan.md` before testing. Each case must use this structure:
 ```text
 <complete program output, excluding user-entered commands>
 ```
+
+**Expected data:**
+```text
+<optional contents of data/pathfinder.txt after the test>
+```
 ````
+
+`Initial data` and `Expected data` are optional. Use them for persistence tests. Each test runs in an isolated temporary directory, so one test's saved tasks do not affect another test.
 
 ## Run tests
 
