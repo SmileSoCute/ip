@@ -45,5 +45,6 @@ After every code change, review the affected behavior and update or add JUnit te
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
-When proposing or creating a commit message, include enough detail to explain the rationale for the change.
+Before proposing, creating, or amending any commit, invoke the `$seedu-git-standard` project skill. All future commit messages must follow its SE-EDU subject and body rules, including explaining the rationale for non-trivial changes.
+Use the same skill when naming a Git branch.
 Do not commit or push unless explicitly asked.
