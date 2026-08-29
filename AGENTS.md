@@ -32,6 +32,12 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 
 After every update to application code, review `test/ui-test-plan.md` and update it when the change adds, alters, or removes observable console behaviour. Then invoke the `$test-ui` skill to run the recorded UI test cases. Report the test transcript and stop to investigate any failing test before treating the code update as complete.
 
+## JUnit test coverage
+
+Maintain JUnit tests for approximately the top 50% highest-value methods in the codebase. Prioritize complex, core, and critical business logic over trivial getters, setters, or simple presentation methods; this is a method-prioritization target, not a 50% line-coverage target.
+
+After every code change, review the affected behavior and update or add JUnit tests as needed to continue meeting this target. Run the complete Gradle JUnit suite with Java 25, and investigate any failure before treating the code update as complete.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
