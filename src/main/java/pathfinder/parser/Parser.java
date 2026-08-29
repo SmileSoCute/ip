@@ -11,10 +11,17 @@ import pathfinder.util.DateTimeParser;
 
 /** Interprets raw user input and validates command arguments. */
 public final class Parser {
+    /** Prevents instantiation of this utility class. */
     private Parser() {
     }
 
-    /** Returns the lower-case first word of a command. */
+    /**
+     * Extracts and normalizes the command word from user input.
+     *
+     * @param input complete user input
+     * @return lower-case first word of the command
+     * @throws PathfinderException if the input is empty
+     */
     public static String parseCommandWord(String input) throws PathfinderException {
         if (input.isEmpty()) {
             throw new PathfinderException("Oh no friend! You didn't enter anything!");
@@ -22,7 +29,13 @@ public final class Parser {
         return input.split("\\s+", 2)[0].toLowerCase(Locale.ROOT);
     }
 
-    /** Rejects unexpected text after a command that has no arguments. */
+    /**
+     * Rejects unexpected text after a command that has no arguments.
+     *
+     * @param input complete user input
+     * @param command expected command word
+     * @throws PathfinderException if the input contains additional text
+     */
     public static void requireNoArguments(String input, String command)
             throws PathfinderException {
         if (!input.equalsIgnoreCase(command)) {
@@ -31,12 +44,25 @@ public final class Parser {
         }
     }
 
-    /** Creates a todo from the required text following its command word. */
+    /**
+     * Creates a todo from the required text following its command word.
+     *
+     * @param input complete todo command
+     * @return the parsed todo task
+     * @throws PathfinderException if the description is missing
+     */
     public static ToDoTask parseTodo(String input) throws PathfinderException {
         return new ToDoTask(parseDescription(input, "todo"));
     }
 
-    /** Parses a positive task number after mark, unmark, or delete. */
+    /**
+     * Parses a positive task number after commands such as mark, unmark, or delete.
+     *
+     * @param input complete command input
+     * @param command command whose task number is being parsed
+     * @return parsed task number
+     * @throws PathfinderException if the number is missing, malformed, or too large
+     */
     public static int parseTaskNumber(String input, String command)
             throws PathfinderException {
         String numberText = parseDescription(input, command);
@@ -51,7 +77,13 @@ public final class Parser {
         }
     }
 
-    /** Creates a deadline from its description and /by value. */
+    /**
+     * Creates a deadline from its description and {@code /by} value.
+     *
+     * @param input complete deadline command
+     * @return the parsed deadline task
+     * @throws PathfinderException if required fields or a valid date-time are missing
+     */
     public static DeadlineTask parseDeadline(String input) throws PathfinderException {
         String details = parseDescription(input, "deadline");
         int byIndex = details.indexOf(" /by ");
@@ -70,7 +102,13 @@ public final class Parser {
         return new DeadlineTask(description, by);
     }
 
-    /** Creates an event from its description, /from value, and /to value. */
+    /**
+     * Creates an event from its description, {@code /from} value, and {@code /to} value.
+     *
+     * @param input complete event command
+     * @return the parsed event task
+     * @throws PathfinderException if required fields are invalid or the end is not after the start
+     */
     public static EventTask parseEvent(String input) throws PathfinderException {
         String details = parseDescription(input, "event");
         int fromIndex = details.indexOf(" /from ");
@@ -95,7 +133,14 @@ public final class Parser {
         return new EventTask(description, from, to);
     }
 
-    /** Returns the required non-empty text after a command word. */
+    /**
+     * Extracts the required non-empty text after a command word.
+     *
+     * @param input complete command input
+     * @param command command word to remove
+     * @return trimmed text following the command
+     * @throws PathfinderException if no text follows the command
+     */
     private static String parseDescription(String input, String command)
             throws PathfinderException {
         String description = input.substring(command.length()).trim();
