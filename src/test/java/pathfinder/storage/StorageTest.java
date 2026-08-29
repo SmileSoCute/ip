@@ -19,7 +19,7 @@ import org.junit.jupiter.api.io.TempDir;
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
 import pathfinder.task.Task;
-import pathfinder.task.ToDoTask;
+import pathfinder.task.TodoTask;
 
 /** Tests Pathfinder's task persistence, compatibility, and corruption handling. */
 class StorageTest {
@@ -40,7 +40,7 @@ class StorageTest {
     void saveThenLoad_allTaskTypes_preservesFieldsAndStatus() throws IOException {
         Storage storage = createStorage();
         ArrayList<Task> tasks = new ArrayList<>();
-        ToDoTask todo = new ToDoTask("read | book");
+        TodoTask todo = new TodoTask("read | book");
         DeadlineTask deadline = new DeadlineTask("return book",
                 LocalDateTime.of(2019, 12, 2, 18, 0));
         deadline.doTask();
@@ -55,7 +55,7 @@ class StorageTest {
         ArrayList<Task> loaded = storage.load();
 
         assertEquals(3, loaded.size());
-        ToDoTask loadedTodo = assertInstanceOf(ToDoTask.class, loaded.get(0));
+        TodoTask loadedTodo = assertInstanceOf(TodoTask.class, loaded.get(0));
         DeadlineTask loadedDeadline = assertInstanceOf(DeadlineTask.class, loaded.get(1));
         EventTask loadedEvent = assertInstanceOf(EventTask.class, loaded.get(2));
         assertEquals("read | book", loadedTodo.getDescription());
@@ -73,7 +73,7 @@ class StorageTest {
         Path dataFile = dataFile();
         Storage storage = new Storage(dataFile);
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new ToDoTask("read | book"));
+        tasks.add(new TodoTask("read | book"));
 
         storage.save(tasks);
 
@@ -85,11 +85,11 @@ class StorageTest {
     void save_secondTaskList_replacesPreviousFileContents() throws IOException {
         Storage storage = createStorage();
         ArrayList<Task> originalTasks = new ArrayList<>();
-        originalTasks.add(new ToDoTask("first"));
-        originalTasks.add(new ToDoTask("second"));
+        originalTasks.add(new TodoTask("first"));
+        originalTasks.add(new TodoTask("second"));
         storage.save(originalTasks);
         ArrayList<Task> replacementTasks = new ArrayList<>();
-        replacementTasks.add(new ToDoTask("replacement"));
+        replacementTasks.add(new TodoTask("replacement"));
 
         storage.save(replacementTasks);
         ArrayList<Task> loaded = storage.load();
@@ -103,7 +103,7 @@ class StorageTest {
         Path dataFile = temporaryDirectory.resolve("nested/data/pathfinder.txt");
         Storage storage = new Storage(dataFile);
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new ToDoTask("read book"));
+        tasks.add(new TodoTask("read book"));
 
         storage.save(tasks);
 
@@ -136,7 +136,7 @@ class StorageTest {
         ArrayList<Task> loaded = storage.load();
 
         assertEquals(3, loaded.size());
-        assertInstanceOf(ToDoTask.class, loaded.get(0));
+        assertInstanceOf(TodoTask.class, loaded.get(0));
         assertTrue(loaded.get(0).isDone());
         DeadlineTask deadline = assertInstanceOf(DeadlineTask.class, loaded.get(1));
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), deadline.getBy());

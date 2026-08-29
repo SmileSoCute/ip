@@ -5,7 +5,7 @@ public interface Describable {
     /**
      * Returns the object's description.
      *
-     * @return the description shown to the user
+     * @return The description shown to the user.
      */
     String getDescription();
 }

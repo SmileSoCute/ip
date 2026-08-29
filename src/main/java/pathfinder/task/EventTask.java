@@ -6,20 +6,20 @@ import pathfinder.util.DateTimeParser;
 
 /** Represents a task that occurs between a start and end date-time. */
 public class EventTask extends Task {
-    private LocalDateTime from;
-    private LocalDateTime to;
+    private final LocalDateTime startDateTime;
+    private final LocalDateTime endDateTime;
 
     /**
      * Creates an incomplete event task.
      *
-     * @param description description of the event
-     * @param from date and time at which the event starts
-     * @param to date and time at which the event ends
+     * @param description Description of the event.
+     * @param from Date and time at which the event starts.
+     * @param to Date and time at which the event ends.
      */
     public EventTask(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.startDateTime = from;
+        this.endDateTime = to;
     }
 
     /**
@@ -28,7 +28,7 @@ public class EventTask extends Task {
      * @return the event start
      */
     public LocalDateTime getFrom() {
-        return from;
+        return startDateTime;
     }
 
     /**
@@ -37,7 +37,7 @@ public class EventTask extends Task {
      * @return the event end
      */
     public LocalDateTime getTo() {
-        return to;
+        return endDateTime;
     }
 
     /**
@@ -48,7 +48,7 @@ public class EventTask extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: "
-                + DateTimeParser.formatDisplay(from) + " to: "
-                + DateTimeParser.formatDisplay(to) + ")";
+                + DateTimeParser.formatDisplay(startDateTime) + " to: "
+                + DateTimeParser.formatDisplay(endDateTime) + ")";
     }
 }

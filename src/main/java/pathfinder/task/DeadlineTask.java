@@ -6,17 +6,17 @@ import pathfinder.util.DateTimeParser;
 
 /** Represents a task that must be completed by a specific date and time. */
 public class DeadlineTask extends Task {
-    private LocalDateTime by;
+    private final LocalDateTime dueDateTime;
 
     /**
      * Creates an incomplete deadline task.
      *
-     * @param description description of the task
-     * @param by date and time by which the task should be completed
+     * @param description Description of the task.
+     * @param by Date and time by which the task should be completed.
      */
     public DeadlineTask(String description, LocalDateTime by) {
         super(description);
-        this.by = by;
+        this.dueDateTime = by;
     }
 
     /**
@@ -25,7 +25,7 @@ public class DeadlineTask extends Task {
      * @return the deadline date and time
      */
     public LocalDateTime getBy() {
-        return by;
+        return dueDateTime;
     }
 
     /**
@@ -36,6 +36,6 @@ public class DeadlineTask extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: "
-                + DateTimeParser.formatDisplay(by) + ")";
+                + DateTimeParser.formatDisplay(dueDateTime) + ")";
     }
 }

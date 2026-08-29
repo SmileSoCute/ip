@@ -9,11 +9,12 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
 import pathfinder.task.Task;
-import pathfinder.task.ToDoTask;
+import pathfinder.task.TodoTask;
 import pathfinder.util.DateTimeParser;
 
 /** Saves and loads Pathfinder tasks from a configured data file. */
@@ -74,7 +75,7 @@ public class Storage {
     public void save(ArrayList<Task> tasks) throws IOException {
         Files.createDirectories(dataFile.getParent());
         Path temporaryFile = dataFile.resolveSibling(dataFile.getFileName() + ".tmp");
-        java.util.List<String> lines = tasks.stream().map(this::formatTask).toList();
+        List<String> lines = tasks.stream().map(this::formatTask).toList();
         Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
 
         try {
@@ -106,7 +107,7 @@ public class Storage {
                     + encode(DateTimeParser.formatStored(event.getFrom())) + " | "
                     + encode(DateTimeParser.formatStored(event.getTo()));
         }
-        if (task instanceof ToDoTask) {
+        if (task instanceof TodoTask) {
             return "T | " + status + " | " + description;
         }
         throw new IllegalArgumentException("Unsupported task class: " + task.getClass().getName());
@@ -132,22 +133,22 @@ public class Storage {
 
         String description = decodeRequired(fields[2]);
         Task task = switch (fields[0]) {
-        case "T" -> {
-            requireFieldCount(fields, 3);
-            yield new ToDoTask(description);
-        }
-        case "D" -> {
-            requireFieldCount(fields, 4);
-            yield new DeadlineTask(description,
-                    DateTimeParser.parseStored(decodeRequired(fields[3])));
-        }
-        case "E" -> {
-            requireFieldCount(fields, 5);
-            yield new EventTask(description,
-                    DateTimeParser.parseStored(decodeRequired(fields[3])),
-                    DateTimeParser.parseStored(decodeRequired(fields[4])));
-        }
-        default -> throw new IllegalArgumentException("Unknown task type");
+            case "T" -> {
+                requireFieldCount(fields, 3);
+                yield new TodoTask(description);
+            }
+            case "D" -> {
+                requireFieldCount(fields, 4);
+                yield new DeadlineTask(description,
+                        DateTimeParser.parseStored(decodeRequired(fields[3])));
+            }
+            case "E" -> {
+                requireFieldCount(fields, 5);
+                yield new EventTask(description,
+                        DateTimeParser.parseStored(decodeRequired(fields[3])),
+                        DateTimeParser.parseStored(decodeRequired(fields[4])));
+            }
+            default -> throw new IllegalArgumentException("Unknown task type");
         };
 
         if (fields[1].equals("1")) {
@@ -173,10 +174,10 @@ public class Storage {
         char type = line.charAt(1);
         String details = line.substring(7);
         Task task = switch (type) {
-        case 'T' -> new ToDoTask(requireText(details));
-        case 'D' -> parseLegacyDeadline(details);
-        case 'E' -> parseLegacyEvent(details);
-        default -> throw new IllegalArgumentException("Unknown legacy task type");
+            case 'T' -> new TodoTask(requireText(details));
+            case 'D' -> parseLegacyDeadline(details);
+            case 'E' -> parseLegacyEvent(details);
+            default -> throw new IllegalArgumentException("Unknown legacy task type");
         };
         if (line.charAt(4) == 'X') {
             task.doTask();
