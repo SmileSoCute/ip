@@ -116,8 +116,8 @@ class StorageTest {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(new Task("generic task"));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> storage.save(tasks));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> storage.save(tasks));
 
         assertTrue(exception.getMessage().startsWith("Unsupported task class:"));
     }

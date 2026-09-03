@@ -71,8 +71,9 @@ class DateTimeParserTest {
 
     @Test
     void parseStored_invalidDateTime_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> DateTimeParser.parseStored("2019-02-29T18:00:00"));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () ->
+                        DateTimeParser.parseStored("2019-02-29T18:00:00"));
         assertEquals("Invalid stored date and time", exception.getMessage());
     }
 
@@ -90,8 +91,8 @@ class DateTimeParserTest {
 
     @Test
     void parseLegacy_invalidDateTime_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> DateTimeParser.parseLegacy("2/12/2019 1800"));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> DateTimeParser.parseLegacy("2/12/2019 1800"));
         assertEquals("Invalid legacy date and time", exception.getMessage());
     }
 
@@ -130,8 +131,8 @@ class DateTimeParserTest {
 
     /** Verifies that invalid input produces Pathfinder's standard format guidance. */
     private static void assertInvalidInput(String input) {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> DateTimeParser.parseInput(input));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> DateTimeParser.parseInput(input));
         assertEquals(FORMAT_ERROR, exception.getMessage());
     }
 }
