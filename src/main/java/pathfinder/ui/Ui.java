@@ -46,13 +46,15 @@ public class Ui {
     }
 
     /**
-     * Displays one response between separator lines.
+     * Displays one or more response lines between separator lines.
      *
-     * @param message response to display
+     * @param messages response lines to display
      */
-    public void showMessage(String message) {
+    public void showMessage(String... messages) {
         System.out.println(SEPARATOR);
-        System.out.println(message);
+        for (String message : messages) {
+            System.out.println(message);
+        }
         System.out.println(SEPARATOR);
     }
 
@@ -63,11 +65,9 @@ public class Ui {
      * @param taskCount number of tasks after the addition
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println(SEPARATOR);
-        System.out.println("Okay! I've got it friend! I've added this task:");
-        System.out.println(" " + task);
-        System.out.println("Alrighty currently u have " + taskCount + " task(s) in the list yay!");
-        System.out.println(SEPARATOR);
+        showMessage("Okay! I've got it friend! I've added this task:",
+                " " + task,
+                "Alrighty currently u have " + taskCount + " task(s) in the list yay!");
     }
 
     /** Displays Pathfinder's farewell. */
