@@ -28,8 +28,8 @@ class ParserTest {
 
     @Test
     void parseCommandWord_emptyInput_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseCommandWord(""));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseCommandWord(""));
         assertEquals("Oh no friend! You didn't enter anything!", exception.getMessage());
     }
 
@@ -40,8 +40,8 @@ class ParserTest {
 
     @Test
     void requireNoArguments_extraWords_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.requireNoArguments("list extra", "list"));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.requireNoArguments("list extra", "list"));
         assertEquals("Oopsies! The list command does not take extra words.",
                 exception.getMessage());
     }
@@ -56,8 +56,8 @@ class ParserTest {
 
     @Test
     void parseTodo_emptyDescription_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseTodo("todo"));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseTodo("todo"));
         assertEquals("Oopsies! A todo needs a description, friend!", exception.getMessage());
     }
 
@@ -68,16 +68,17 @@ class ParserTest {
 
     @Test
     void parseTaskNumber_nonNumericValue_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseTaskNumber("mark twelve", "mark"));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseTaskNumber("mark twelve", "mark"));
         assertEquals("Oopsies! Please provide one positive whole task number.",
                 exception.getMessage());
     }
 
     @Test
     void parseTaskNumber_tooLargeValue_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseTaskNumber("mark 99999999999999999999", "mark"));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () ->
+                        Parser.parseTaskNumber("mark 99999999999999999999", "mark"));
         assertEquals("Oopsies! That task number is too large.", exception.getMessage());
     }
 
@@ -93,8 +94,8 @@ class ParserTest {
 
     @Test
     void parseFindKeyword_emptyKeyword_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseFindKeyword("find    "));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseFindKeyword("find    "));
         assertEquals("Oopsies! The find command needs a keyword, friend!",
                 exception.getMessage());
     }
@@ -109,8 +110,8 @@ class ParserTest {
 
     @Test
     void parseDeadline_missingByMarker_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseDeadline("deadline return book"));
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseDeadline("deadline return book"));
         assertEquals("Oopsies! A deadline needs '/by' followed by a date or time.",
                 exception.getMessage());
     }
@@ -127,16 +128,16 @@ class ParserTest {
 
     @Test
     void parseEvent_markersInWrongOrder_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseEvent(
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseEvent(
                         "event meeting /to 2019-12-03 1600 /from 2019-12-03 1400"));
         assertEquals("Oopsies! An event needs '/from' before '/to'.", exception.getMessage());
     }
 
     @Test
     void parseEvent_endNotAfterStart_throwsPathfinderException() {
-        PathfinderException exception = assertThrows(PathfinderException.class,
-                () -> Parser.parseEvent(
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseEvent(
                         "event meeting /from 2019-12-03 1600 /to 2019-12-03 1600"));
         assertEquals("Oopsies! An event's '/to' time must be after its '/from' time.",
                 exception.getMessage());
