@@ -1,0 +1,31 @@
+.label {
+    -fx-background-color: #a9d8f0;
+    -fx-background-radius: 14px 14px 2px 14px;
+    -fx-text-fill: #173f5d;
+    -fx-padding: 8px 10px;
+}
+
+.reply-label {
+    -fx-background-color: #e8f5ff;
+    -fx-background-radius: 14px 14px 14px 2px;
+    -fx-text-fill: #315a78;
+}
+
+.add-label {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #78350f;
+}
+
+.marked-label {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #14532d;
+}
+
+.delete-label {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #7f1d1d;
+}
+
+#displayPicture {
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.18), 6, 0.3, 1, 2);
+}

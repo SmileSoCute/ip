@@ -11,173 +11,204 @@ import pathfinder.storage.Storage;
 import pathfinder.task.Task;
 import pathfinder.ui.Ui;
 
-/** Coordinates command parsing, task management, storage, and console interaction. */
+/** Coordinates command parsing, task management, and storage for Pathfinder. */
 public class Pathfinder {
-    private static final Storage STORAGE = new Storage(Path.of("data", "pathfinder.txt"));
-    private static final Ui UI = new Ui();
+    private static final String GOODBYE_MESSAGE = "Bye bye! Hope to see you around soon!";
 
-    /** Creates a Pathfinder application entry-point instance. */
+    private final Storage storage;
+    private final ArrayList<Task> tasks;
+    private final String startupMessage;
+
+    /** Creates a Pathfinder application that stores tasks in the default data file. */
     public Pathfinder() {
+        this(Path.of("data", "pathfinder.txt"));
     }
 
     /**
-     * Starts Pathfinder, loads saved tasks, and processes commands until the user exits.
+     * Creates a Pathfinder application that stores tasks at the specified path.
      *
-     * @param args command-line arguments; Pathfinder does not use them
+     * @param storagePath path of the task data file.
+     */
+    Pathfinder(Path storagePath) {
+        storage = new Storage(storagePath);
+        ArrayList<Task> loadedTasks;
+        String message = "";
+
+        try {
+            loadedTasks = storage.load();
+            if (storage.getSkippedLineCount() > 0) {
+                message = "Heads up! I skipped " + storage.getSkippedLineCount()
+                        + " invalid saved task(s).";
+            }
+        } catch (IOException exception) {
+            loadedTasks = new ArrayList<>();
+            message = "Oopsies! I couldn't read your saved tasks, so I started with an empty list.";
+        }
+
+        tasks = loadedTasks;
+        startupMessage = message;
+    }
+
+    /**
+     * Starts the original console interface for Pathfinder.
+     *
+     * @param args command-line arguments; Pathfinder does not use them.
      */
     public static void main(String[] args) {
-        UI.showGreeting();
-        ArrayList<Task> tasks = loadTasksSafely();
+        Ui ui = new Ui();
+        Pathfinder pathfinder = new Pathfinder();
+        ui.showGreeting();
+        if (!pathfinder.getStartupMessage().isEmpty()) {
+            ui.showMessage(pathfinder.getStartupMessage());
+        }
 
-        while (UI.hasNextInput()) {
-            String input = UI.readInput();
+        while (ui.hasNextInput()) {
+            String input = ui.readInput();
             if (input.equalsIgnoreCase("bye")) {
                 break;
             }
-
-            try {
-                handleCommand(input, tasks);
-            } catch (PathfinderException exception) {
-                UI.showMessage(exception.getMessage());
-            } catch (IOException exception) {
-                UI.showMessage("Oopsies! I couldn't save your tasks. Your latest change was undone.");
-            }
+            ui.showMessage(pathfinder.getResponse(input));
         }
 
-        UI.showGoodbye();
+        ui.showGoodbye();
     }
 
     /**
-     * Loads valid saved tasks without allowing storage problems to stop startup.
+     * Processes one command and returns the message that should be shown to the user.
      *
-     * @return loaded tasks, or an empty list when the data file cannot be read
+     * @param input complete command entered by the user.
+     * @return Pathfinder's response to the command.
      */
-    private static ArrayList<Task> loadTasksSafely() {
-        try {
-            ArrayList<Task> tasks = STORAGE.load();
-            if (STORAGE.getSkippedLineCount() > 0) {
-                UI.showMessage("Heads up! I skipped " + STORAGE.getSkippedLineCount()
-                        + " invalid saved task(s).");
-            }
-            return tasks;
-        } catch (IOException exception) {
-            UI.showMessage("Oopsies! I couldn't read your saved tasks, so I started with an empty list.");
-            return new ArrayList<>();
+    public String getResponse(String input) {
+        String trimmedInput = input.trim();
+        if (trimmedInput.equalsIgnoreCase("bye")) {
+            return GOODBYE_MESSAGE;
         }
+
+        try {
+            return handleCommand(trimmedInput);
+        } catch (PathfinderException exception) {
+            return exception.getMessage();
+        } catch (IOException exception) {
+            return "Oopsies! I couldn't save your tasks. Your latest change was undone.";
+        }
+    }
+
+    /**
+     * Returns the warning generated while reading persisted tasks at startup.
+     *
+     * @return the startup warning, or an empty string when no warning occurred.
+     */
+    public String getStartupMessage() {
+        return startupMessage;
     }
 
     /**
      * Parses and performs one user command.
      *
-     * @param input complete command entered by the user
-     * @param tasks current mutable task list
-     * @throws PathfinderException if the command or its arguments are invalid
-     * @throws IOException if a command changes the list but the change cannot be saved
+     * @param input complete user command.
+     * @return message describing the command result.
+     * @throws PathfinderException if the command or its arguments are invalid.
+     * @throws IOException if a command changes the list but the change cannot be saved.
      */
-    private static void handleCommand(String input, ArrayList<Task> tasks)
-            throws PathfinderException, IOException {
+    private String handleCommand(String input) throws PathfinderException, IOException {
         String command = Parser.parseCommandWord(input);
 
-        switch (command) {
+        return switch (command) {
             case "list" -> {
                 Parser.requireNoArguments(input, "list");
-                printList(tasks);
+                yield printList();
             }
-            case "mark" -> markTask(tasks, Parser.parseTaskNumber(input, "mark"));
-            case "unmark" -> unmarkTask(tasks, Parser.parseTaskNumber(input, "unmark"));
-            case "delete" -> deleteTask(tasks, Parser.parseTaskNumber(input, "delete"));
-            case "find" -> findTasks(tasks, Parser.parseFindKeyword(input));
-            case "todo" -> addTask(tasks, Parser.parseTodo(input));
-            case "deadline" -> addTask(tasks, Parser.parseDeadline(input));
-            case "event" -> addTask(tasks, Parser.parseEvent(input));
+            case "mark" -> markTask(Parser.parseTaskNumber(input, "mark"));
+            case "unmark" -> unmarkTask(Parser.parseTaskNumber(input, "unmark"));
+            case "delete" -> deleteTask(Parser.parseTaskNumber(input, "delete"));
+            case "find" -> findTasks(Parser.parseFindKeyword(input));
+            case "todo" -> addTask(Parser.parseTodo(input));
+            case "deadline" -> addTask(Parser.parseDeadline(input));
+            case "event" -> addTask(Parser.parseEvent(input));
             case "bye" -> throw new PathfinderException(
                     "Oopsies! The bye command does not take extra words.");
             default -> throw new PathfinderException("Oopsies! I don't understand that command.");
-        }
+        };
     }
 
     /**
      * Marks a task and restores its previous status if saving fails.
      *
-     * @param tasks current mutable task list
-     * @param number one-based number of the task to mark
-     * @throws PathfinderException if the task number is invalid or the task is already done
-     * @throws IOException if the updated list cannot be saved
+     * @param number one-based number of the task to mark.
+     * @return confirmation message for the marked task.
+     * @throws PathfinderException if the task number is invalid or the task is already done.
+     * @throws IOException if the updated list cannot be saved.
      */
-    private static void markTask(ArrayList<Task> tasks, int number)
-            throws PathfinderException, IOException {
-        Task task = getTask(tasks, number);
+    private String markTask(int number) throws PathfinderException, IOException {
+        Task task = getTask(number);
         if (task.isDone()) {
             throw new PathfinderException("Oopsies! That task is already marked as done.");
         }
 
         task.doTask();
         try {
-            STORAGE.save(tasks);
+            storage.save(tasks);
         } catch (IOException exception) {
             task.undoTask();
             throw exception;
         }
-        UI.showMessage("Awesome sauce! I have marked this task up dude:", task.toString());
+        return "Awesome sauce! I have marked this task up dude:\n" + task;
     }
 
     /**
      * Unmarks a task and restores its previous status if saving fails.
      *
-     * @param tasks current mutable task list
-     * @param number one-based number of the task to unmark
-     * @throws PathfinderException if the task number is invalid or the task is already incomplete
-     * @throws IOException if the updated list cannot be saved
+     * @param number one-based number of the task to unmark.
+     * @return confirmation message for the unmarked task.
+     * @throws PathfinderException if the task number is invalid or the task is already incomplete.
+     * @throws IOException if the updated list cannot be saved.
      */
-    private static void unmarkTask(ArrayList<Task> tasks, int number)
-            throws PathfinderException, IOException {
-        Task task = getTask(tasks, number);
+    private String unmarkTask(int number) throws PathfinderException, IOException {
+        Task task = getTask(number);
         if (!task.isDone()) {
             throw new PathfinderException("Oopsies! That task is already marked as not done.");
         }
 
         task.undoTask();
         try {
-            STORAGE.save(tasks);
+            storage.save(tasks);
         } catch (IOException exception) {
             task.doTask();
             throw exception;
         }
-        UI.showMessage("Alright man, I have unmarked this task for you:", task.toString());
+        return "Alright man, I have unmarked this task for you:\n" + task;
     }
 
     /**
      * Deletes a task and restores it at the same position if saving fails.
      *
-     * @param tasks current mutable task list
-     * @param number one-based number of the task to delete
-     * @throws PathfinderException if the task number is invalid
-     * @throws IOException if the updated list cannot be saved
+     * @param number one-based number of the task to delete.
+     * @return confirmation message for the removed task.
+     * @throws PathfinderException if the task number is invalid.
+     * @throws IOException if the updated list cannot be saved.
      */
-    private static void deleteTask(ArrayList<Task> tasks, int number)
-            throws PathfinderException, IOException {
-        Task removed = getTask(tasks, number);
+    private String deleteTask(int number) throws PathfinderException, IOException {
+        Task removed = getTask(number);
         tasks.remove(number - 1);
         try {
-            STORAGE.save(tasks);
+            storage.save(tasks);
         } catch (IOException exception) {
             tasks.add(number - 1, removed);
             throw exception;
         }
-        UI.showMessage("Got it my friend! I've removed this task:",
-                " " + removed,
-                " Alrighty currently you have " + tasks.size() + " task(s) in the list yay!");
+        return "Got it my friend! I've removed this task:\n " + removed
+                + "\n Alrighty currently you have " + tasks.size() + " task(s) in the list yay!";
     }
 
     /**
      * Returns a task using its one-based number.
      *
-     * @param tasks current task list
-     * @param number one-based task number
-     * @return the requested task
-     * @throws PathfinderException if the task number is outside the list
+     * @param number one-based task number.
+     * @return the requested task.
+     * @throws PathfinderException if the task number is outside the list.
      */
-    private static Task getTask(ArrayList<Task> tasks, int number) throws PathfinderException {
+    private Task getTask(int number) throws PathfinderException {
         if (number < 1 || number > tasks.size()) {
             throw new PathfinderException("Oopsies! That task number doesn't exist, friend!");
         }
@@ -185,33 +216,32 @@ public class Pathfinder {
     }
 
     /**
-     * Displays all tasks, or a clear message when the list is empty.
+     * Returns all tasks, or a clear message when the task list is empty.
      *
-     * @param tasks tasks to display
+     * @return formatted task-list message.
      */
-    private static void printList(ArrayList<Task> tasks) {
+    private String printList() {
         if (tasks.isEmpty()) {
-            UI.showMessage("Your task list is empty, friend!");
-            return;
+            return "Your task list is empty, friend!";
         }
 
         StringBuilder result = new StringBuilder("Here are your tasks:\n");
-        for (int i = 0; i < tasks.size(); i++) {
-            result.append(i + 1).append(". ").append(tasks.get(i));
-            if (i < tasks.size() - 1) {
+        for (int index = 0; index < tasks.size(); index++) {
+            result.append(index + 1).append(". ").append(tasks.get(index));
+            if (index < tasks.size() - 1) {
                 result.append("\n");
             }
         }
-        UI.showMessage(result.toString());
+        return result.toString();
     }
 
     /**
-     * Displays tasks whose descriptions contain the keyword, ignoring case.
+     * Returns tasks whose descriptions contain the keyword, ignoring case.
      *
-     * @param tasks Tasks to search.
-     * @param keyword Keyword to find in task descriptions.
+     * @param keyword text to search for in task descriptions.
+     * @return formatted search-result message.
      */
-    private static void findTasks(ArrayList<Task> tasks, String keyword) {
+    private String findTasks(String keyword) {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         StringBuilder result = new StringBuilder(
                 "Alrighty friend! Here are the matching tasks I found:\n");
@@ -226,31 +256,30 @@ public class Pathfinder {
         }
 
         if (matchCount == 0) {
-            UI.showMessage("Oopsies! I couldn't find any tasks containing \""
-                    + keyword + "\".");
-            return;
+            return "Oopsies! I couldn't find any tasks containing \"" + keyword + "\".";
         }
 
         result.setLength(result.length() - 1);
-        UI.showMessage(result.toString());
+        return result.toString();
     }
 
     /**
      * Adds a task and removes it again if saving fails.
      *
-     * @param tasks current mutable task list
-     * @param task task to add
-     * @throws IOException if the updated list cannot be saved
+     * @param task task to add.
+     * @return confirmation message for the new task.
+     * @throws IOException if the updated list cannot be saved.
      */
-    private static void addTask(ArrayList<Task> tasks, Task task) throws IOException {
+    private String addTask(Task task) throws IOException {
         tasks.add(task);
         try {
-            STORAGE.save(tasks);
+            storage.save(tasks);
         } catch (IOException exception) {
             tasks.remove(tasks.size() - 1);
             throw exception;
         }
 
-        UI.showTaskAdded(task, tasks.size());
+        return "Okay! I've got it friend! I've added this task:\n " + task
+                + "\nAlrighty currently u have " + tasks.size() + " task(s) in the list yay!";
     }
 }
