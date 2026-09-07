@@ -118,7 +118,7 @@ public class Pathfinder {
             task.undoTask();
             throw exception;
         }
-        UI.showMessage("Awesome sauce! I have marked this task up dude:\n" + task);
+        UI.showMessage("Awesome sauce! I have marked this task up dude:", task.toString());
     }
 
     /**
@@ -143,7 +143,7 @@ public class Pathfinder {
             task.doTask();
             throw exception;
         }
-        UI.showMessage("Alright man, I have unmarked this task for you:\n" + task);
+        UI.showMessage("Alright man, I have unmarked this task for you:", task.toString());
     }
 
     /**
@@ -164,8 +164,9 @@ public class Pathfinder {
             tasks.add(number - 1, removed);
             throw exception;
         }
-        UI.showMessage("Got it my friend! I've removed this task:\n " + removed
-                + "\n Alrighty currently you have " + tasks.size() + " task(s) in the list yay!");
+        UI.showMessage("Got it my friend! I've removed this task:",
+                " " + removed,
+                " Alrighty currently you have " + tasks.size() + " task(s) in the list yay!");
     }
 
     /**
