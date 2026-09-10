@@ -43,7 +43,7 @@ class StorageTest {
         TodoTask todo = new TodoTask("read | book");
         DeadlineTask deadline = new DeadlineTask("return book",
                 LocalDateTime.of(2019, 12, 2, 18, 0));
-        deadline.doTask();
+        deadline.markAsDone();
         EventTask event = new EventTask("project meeting",
                 LocalDateTime.of(2019, 12, 3, 14, 0),
                 LocalDateTime.of(2019, 12, 3, 16, 0));

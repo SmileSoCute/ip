@@ -149,12 +149,12 @@ public class Pathfinder {
             throw new PathfinderException("Oopsies! That task is already marked as done.");
         }
 
-        task.doTask();
+        task.markAsDone();
         assert task.isDone() : "Task should be done after marking";
         try {
             storage.save(tasks);
         } catch (IOException exception) {
-            task.undoTask();
+            task.markAsIncomplete();
             assert !task.isDone() : "Failed mark should restore the incomplete status";
             throw exception;
         }
@@ -175,12 +175,12 @@ public class Pathfinder {
             throw new PathfinderException("Oopsies! That task is already marked as not done.");
         }
 
-        task.undoTask();
+        task.markAsIncomplete();
         assert !task.isDone() : "Task should be incomplete after unmarking";
         try {
             storage.save(tasks);
         } catch (IOException exception) {
-            task.doTask();
+            task.markAsDone();
             assert task.isDone() : "Failed unmark should restore the completed status";
             throw exception;
         }

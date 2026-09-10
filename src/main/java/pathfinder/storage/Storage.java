@@ -152,7 +152,7 @@ public class Storage {
         };
 
         if (fields[1].equals("1")) {
-            task.doTask();
+            task.markAsDone();
         }
         return task;
     }
@@ -180,7 +180,7 @@ public class Storage {
             default -> throw new IllegalArgumentException("Unknown legacy task type");
         };
         if (line.charAt(4) == 'X') {
-            task.doTask();
+            task.markAsDone();
         }
         return task;
     }

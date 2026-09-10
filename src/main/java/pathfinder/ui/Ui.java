@@ -2,8 +2,6 @@ package pathfinder.ui;
 
 import java.util.Scanner;
 
-import pathfinder.task.Task;
-
 /** Handles all console input and output for Pathfinder. */
 public class Ui {
     private static final String SEPARATOR = "____________________________________________________________";
@@ -56,18 +54,6 @@ public class Ui {
             System.out.println(message);
         }
         System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Displays the task that was added and the new number of tasks.
-     *
-     * @param task newly added task
-     * @param taskCount number of tasks after the addition
-     */
-    public void showTaskAdded(Task task, int taskCount) {
-        showMessage("Okay! I've got it friend! I've added this task:",
-                " " + task,
-                "Alrighty currently u have " + taskCount + " task(s) in the list yay!");
     }
 
     /** Displays Pathfinder's farewell. */

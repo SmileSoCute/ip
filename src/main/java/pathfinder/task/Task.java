@@ -1,7 +1,7 @@
 package pathfinder.task;
 
 /** Represents a task with a description and completion status. */
-public class Task implements Describable {
+public class Task {
     private final String description;
     private boolean isDone;
 
@@ -18,12 +18,12 @@ public class Task implements Describable {
     }
 
     /** Marks this task as completed. */
-    public void doTask() {
+    public void markAsDone() {
         this.isDone = true;
     }
 
     /** Marks this task as incomplete. */
-    public void undoTask() {
+    public void markAsIncomplete() {
         this.isDone = false;
     }
 
@@ -51,7 +51,6 @@ public class Task implements Describable {
      *
      * @return the task description
      */
-    @Override
     public String getDescription() {
         return this.description;
     }
