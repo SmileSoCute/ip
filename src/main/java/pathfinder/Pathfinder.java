@@ -146,11 +146,11 @@ public class Pathfinder {
             throw new PathfinderException("Oopsies! That task is already marked as done.");
         }
 
-        task.doTask();
+        task.markAsDone();
         try {
             storage.save(tasks);
         } catch (IOException exception) {
-            task.undoTask();
+            task.markAsIncomplete();
             throw exception;
         }
         return "Awesome sauce! I have marked this task up dude:\n" + task;
@@ -170,11 +170,11 @@ public class Pathfinder {
             throw new PathfinderException("Oopsies! That task is already marked as not done.");
         }
 
-        task.undoTask();
+        task.markAsIncomplete();
         try {
             storage.save(tasks);
         } catch (IOException exception) {
-            task.doTask();
+            task.markAsDone();
             throw exception;
         }
         return "Alright man, I have unmarked this task for you:\n" + task;

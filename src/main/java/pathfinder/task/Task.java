@@ -16,12 +16,12 @@ public class Task {
     }
 
     /** Marks this task as completed. */
-    public void doTask() {
+    public void markAsDone() {
         this.isDone = true;
     }
 
     /** Marks this task as incomplete. */
-    public void undoTask() {
+    public void markAsIncomplete() {
         this.isDone = false;
     }
 
