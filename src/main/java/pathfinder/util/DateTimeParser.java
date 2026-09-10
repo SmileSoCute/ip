@@ -14,7 +14,6 @@ public final class DateTimeParser {
     private static final DateTimeFormatter INPUT_DATE_TIME = DateTimeFormatter
             .ofPattern("uuuu-MM-dd HHmm")
             .withResolverStyle(ResolverStyle.STRICT);
-    private static final DateTimeFormatter INPUT_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
     private static final DateTimeFormatter INPUT_SLASH_DATE_TIME = DateTimeFormatter
             .ofPattern("d/M/uuuu HHmm")
             .withResolverStyle(ResolverStyle.STRICT);
@@ -23,6 +22,12 @@ public final class DateTimeParser {
             .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter DISPLAY_DATE_TIME = DateTimeFormatter
             .ofPattern("MMM d uuuu h:mm a", Locale.ENGLISH);
+    private static final DateTimeFormatter[] INPUT_DATE_TIME_FORMATTERS = {
+        INPUT_DATE_TIME, INPUT_SLASH_DATE_TIME
+    };
+    private static final DateTimeFormatter[] INPUT_DATE_FORMATTERS = {
+        DateTimeFormatter.ISO_LOCAL_DATE, INPUT_SLASH_DATE
+    };
 
     /** Prevents instantiation of this utility class. */
     private DateTimeParser() {
@@ -36,27 +41,24 @@ public final class DateTimeParser {
      * @throws PathfinderException if the value does not match a supported format
      */
     public static LocalDateTime parseInput(String text) throws PathfinderException {
-        try {
-            return LocalDateTime.parse(text, INPUT_DATE_TIME);
-        } catch (DateTimeParseException ignored) {
-            // Try the next supported format.
+        for (DateTimeFormatter formatter : INPUT_DATE_TIME_FORMATTERS) {
+            try {
+                return LocalDateTime.parse(text, formatter);
+            } catch (DateTimeParseException ignored) {
+                // Try the next supported date-time format.
+            }
         }
-        try {
-            return LocalDateTime.parse(text, INPUT_SLASH_DATE_TIME);
-        } catch (DateTimeParseException ignored) {
-            // Try a date without a time next.
+
+        for (DateTimeFormatter formatter : INPUT_DATE_FORMATTERS) {
+            try {
+                return LocalDate.parse(text, formatter).atStartOfDay();
+            } catch (DateTimeParseException ignored) {
+                // Try the next supported date format.
+            }
         }
-        try {
-            return LocalDate.parse(text, INPUT_DATE).atStartOfDay();
-        } catch (DateTimeParseException ignored) {
-            // Try the remaining supported format.
-        }
-        try {
-            return LocalDate.parse(text, INPUT_SLASH_DATE).atStartOfDay();
-        } catch (DateTimeParseException exception) {
-            throw new PathfinderException(
-                    "Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.");
-        }
+
+        throw new PathfinderException(
+                "Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.");
     }
 
     /**
