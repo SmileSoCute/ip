@@ -43,6 +43,20 @@ class PathfinderTest {
         assertEquals("Oopsies! I don't understand that command.", pathfinder.getResponse("unknown"));
     }
 
+    @Test
+    void getResponse_findCommand_filtersAndRenumbersMatches() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+        pathfinder.getResponse("todo write code");
+        pathfinder.getResponse("todo return BOOK");
+
+        String response = pathfinder.getResponse("find book");
+
+        assertEquals("Alrighty friend! Here are the matching tasks I found:\n"
+                + "1. [T][ ] read book\n"
+                + "2. [T][ ] return BOOK", response);
+    }
+
     /** Creates Pathfinder with an isolated data file for one test. */
     private Pathfinder createPathfinder() {
         return new Pathfinder(temporaryDirectory.resolve("data/pathfinder.txt"));
