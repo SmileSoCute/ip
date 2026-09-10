@@ -3,7 +3,10 @@ package pathfinder;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import pathfinder.exception.PathfinderException;
 import pathfinder.parser.Parser;
@@ -249,24 +252,19 @@ public class Pathfinder {
      */
     private String findTasks(String keyword) {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
-        StringBuilder result = new StringBuilder(
-                "Alrighty friend! Here are the matching tasks I found:\n");
-        int matchCount = 0;
+        List<Task> matchingTasks = tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase(Locale.ROOT)
+                        .contains(normalizedKeyword))
+                .toList();
 
-        for (Task task : tasks) {
-            String description = task.getDescription().toLowerCase(Locale.ROOT);
-            if (description.contains(normalizedKeyword)) {
-                matchCount++;
-                result.append(matchCount).append(". ").append(task).append("\n");
-            }
-        }
-
-        if (matchCount == 0) {
+        if (matchingTasks.isEmpty()) {
             return "Oopsies! I couldn't find any tasks containing \"" + keyword + "\".";
         }
 
-        result.setLength(result.length() - 1);
-        return result.toString();
+        return IntStream.range(0, matchingTasks.size())
+                .mapToObj(index -> (index + 1) + ". " + matchingTasks.get(index))
+                .collect(Collectors.joining("\n",
+                        "Alrighty friend! Here are the matching tasks I found:\n", ""));
     }
 
     /**
