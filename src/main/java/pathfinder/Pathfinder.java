@@ -147,10 +147,12 @@ public class Pathfinder {
         }
 
         task.doTask();
+        assert task.isDone() : "Task should be done after marking";
         try {
             storage.save(tasks);
         } catch (IOException exception) {
             task.undoTask();
+            assert !task.isDone() : "Failed mark should restore the incomplete status";
             throw exception;
         }
         return "Awesome sauce! I have marked this task up dude:\n" + task;
@@ -171,10 +173,12 @@ public class Pathfinder {
         }
 
         task.undoTask();
+        assert !task.isDone() : "Task should be incomplete after unmarking";
         try {
             storage.save(tasks);
         } catch (IOException exception) {
             task.doTask();
+            assert task.isDone() : "Failed unmark should restore the completed status";
             throw exception;
         }
         return "Alright man, I have unmarked this task for you:\n" + task;
@@ -212,6 +216,8 @@ public class Pathfinder {
         if (number < 1 || number > tasks.size()) {
             throw new PathfinderException("Oopsies! That task number doesn't exist, friend!");
         }
+        assert number >= 1 && number <= tasks.size()
+                : "Validated task number should be within the task list";
         return tasks.get(number - 1);
     }
 
