@@ -105,7 +105,7 @@ ____________________________________________________________
 
 **Expected data:**
 ```text
-T | 1 | cmVhZCBib29r
+T | 1 | cmVhZCBib29r | NONE
 ```
 
 ## Invalid commands and arguments
@@ -344,9 +344,9 @@ ____________________________________________________________
 
 **Expected data:**
 ```text
-D | 0 | cmV0dXJuIGJvb2s | MjAxOS0xMi0wMlQxODowMDowMA
-D | 0 | ZGF0ZSBvbmx5 | MjAxOS0xMi0wMlQwMDowMDowMA
-E | 0 | bWVldGluZw | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
+D | 0 | cmV0dXJuIGJvb2s | MjAxOS0xMi0wMlQxODowMDowMA | NONE
+D | 0 | ZGF0ZSBvbmx5 | MjAxOS0xMi0wMlQwMDowMDowMA | NONE
+E | 0 | bWVldGluZw | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA | NONE
 ```
 
 ## Invalid dates and event ranges
@@ -429,9 +429,9 @@ ____________________________________________________________
 
 **Expected data:**
 ```text
-T | 0 | cmVhZCB8IGJvb2s
-D | 0 | cmV0dXJuIHwgYm9vaw | MjAxOS0xMi0wMlQxODowMDowMA
-E | 0 | cHJvamVjdCB8IG1lZXRpbmc | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA
+T | 0 | cmVhZCB8IGJvb2s | NONE
+D | 0 | cmV0dXJuIHwgYm9vaw | MjAxOS0xMi0wMlQxODowMDowMA | NONE
+E | 0 | cHJvamVjdCB8IG1lZXRpbmc | MjAxOS0xMi0wM1QxNDowMDowMA | MjAxOS0xMi0wM1QxNjowMDowMA | NONE
 ```
 
 ## Find tasks by description
@@ -487,4 +487,93 @@ ____________________________________________________________
 [T][X] read book
 [D][ ] Return BOOK (by: Dec 2 2019 6:00 PM)
 [E][ ] team meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
+```
+
+## Set, change, clear, and validate task priorities
+
+**Aim:** Verify priority validation, idempotent updates, status retention, display, and persistence.
+
+**Input:**
+```text
+priority
+todo read book
+priority 1 urgent
+priority 1 high
+priority 1 HIGH
+mark 1
+priority 1 medium
+unmark 1
+priority 1 none
+todo write code
+priority 2 HIGH
+list
+bye
+```
+
+**Expected output:**
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello friend! My name is Pathfinder.
+What tasks can I do for you today?
+____________________________________________________________
+____________________________________________________________
+Oopsies! Use priority TASK_NUMBER LEVEL.
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [T][ ] read book
+Alrighty currently u have 1 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Oopsies! Priority must be high, medium, low, or none.
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! This task now has HIGH priority:
+[T][ ][HIGH] read book
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! This task now has HIGH priority:
+[T][ ][HIGH] read book
+____________________________________________________________
+____________________________________________________________
+Awesome sauce! I have marked this task up dude:
+[T][X][HIGH] read book
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! This task now has MEDIUM priority:
+[T][X][MEDIUM] read book
+____________________________________________________________
+____________________________________________________________
+Alright man, I have unmarked this task for you:
+[T][ ][MEDIUM] read book
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! This task now has no priority:
+[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it friend! I've added this task:
+ [T][ ] write code
+Alrighty currently u have 2 task(s) in the list yay!
+____________________________________________________________
+____________________________________________________________
+Alrighty friend! This task now has HIGH priority:
+[T][ ][HIGH] write code
+____________________________________________________________
+____________________________________________________________
+Here are your tasks:
+1. [T][ ] read book
+2. [T][ ][HIGH] write code
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+**Expected data:**
+```text
+T | 0 | cmVhZCBib29r | NONE
+T | 0 | d3JpdGUgY29kZQ | HIGH
 ```

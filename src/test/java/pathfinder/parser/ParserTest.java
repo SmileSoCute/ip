@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import pathfinder.exception.PathfinderException;
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
+import pathfinder.task.Priority;
 import pathfinder.task.TodoTask;
 
 /** Tests Pathfinder's command interpretation and validation rules. */
@@ -92,6 +93,47 @@ class ParserTest {
                 PathfinderException.class, () ->
                         Parser.parseTaskNumber("mark 99999999999999999999", "mark"));
         assertEquals("Oopsies! That task number is too large.", exception.getMessage());
+    }
+
+    @Test
+    void parsePriorityCommand_validCommand_returnsNumberAndPriority()
+            throws PathfinderException {
+        Parser.PriorityCommand command = Parser.parsePriorityCommand("priority 12 MeDiUm");
+
+        assertEquals(12, command.taskNumber());
+        assertEquals(Priority.MEDIUM, command.priority());
+    }
+
+    @Test
+    void parsePriorityCommand_wrongArgumentCount_throwsPathfinderException() {
+        PathfinderException missingLevel = assertThrows(
+                PathfinderException.class, () -> Parser.parsePriorityCommand("priority 1"));
+        PathfinderException extraArgument = assertThrows(
+                PathfinderException.class, () ->
+                        Parser.parsePriorityCommand("priority 1 high extra"));
+
+        assertEquals("Oopsies! Use priority TASK_NUMBER LEVEL.", missingLevel.getMessage());
+        assertEquals("Oopsies! Use priority TASK_NUMBER LEVEL.", extraArgument.getMessage());
+    }
+
+    @Test
+    void parsePriorityCommand_nonNumericNumber_throwsPathfinderException() {
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () ->
+                        Parser.parsePriorityCommand("priority first high"));
+
+        assertEquals("Oopsies! Please provide one positive whole task number.",
+                exception.getMessage());
+    }
+
+    @Test
+    void parsePriorityCommand_unknownLevel_throwsPathfinderException() {
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () ->
+                        Parser.parsePriorityCommand("priority 1 urgent"));
+
+        assertEquals("Oopsies! Priority must be high, medium, low, or none.",
+                exception.getMessage());
     }
 
     @Test

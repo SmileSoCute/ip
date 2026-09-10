@@ -2,6 +2,8 @@ package pathfinder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
@@ -62,12 +64,80 @@ class PathfinderTest {
         pathfinder.getResponse("todo read book");
         pathfinder.getResponse("todo write code");
         pathfinder.getResponse("todo return BOOK");
+        pathfinder.getResponse("priority 3 high");
 
         String response = pathfinder.getResponse("find book");
 
         assertEquals("Alrighty friend! Here are the matching tasks I found:\n"
                 + "1. [T][ ] read book\n"
-                + "2. [T][ ] return BOOK", response);
+                + "2. [T][ ][HIGH] return BOOK", response);
+    }
+
+    @Test
+    void getResponse_priorityCommand_persistsAndSurvivesStatusChanges() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+
+        String priorityResponse = pathfinder.getResponse("priority 1 high");
+        pathfinder.getResponse("mark 1");
+        Pathfinder reloadedPathfinder = createPathfinder();
+
+        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+                + "[T][ ][HIGH] read book", priorityResponse);
+        assertEquals("Here are your tasks:\n1. [T][X][HIGH] read book",
+                reloadedPathfinder.getResponse("list"));
+    }
+
+    @Test
+    void getResponse_priorityCommand_replacesClearsAndRepeatsPriority() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+        pathfinder.getResponse("priority 1 high");
+
+        String repeatResponse = pathfinder.getResponse("priority 1 HIGH");
+        String replaceResponse = pathfinder.getResponse("priority 1 medium");
+        String clearResponse = pathfinder.getResponse("priority 1 none");
+
+        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+                + "[T][ ][HIGH] read book", repeatResponse);
+        assertEquals("Alrighty friend! This task now has MEDIUM priority:\n"
+                + "[T][ ][MEDIUM] read book", replaceResponse);
+        assertEquals("Alrighty friend! This task now has no priority:\n"
+                + "[T][ ] read book", clearResponse);
+        assertEquals("Here are your tasks:\n1. [T][ ] read book", pathfinder.getResponse("list"));
+    }
+
+    @Test
+    void getResponse_prioritySaveFails_restoresPreviousPriority() throws IOException {
+        Path storagePath = temporaryDirectory.resolve("data/pathfinder.txt");
+        Pathfinder pathfinder = new Pathfinder(storagePath);
+        pathfinder.getResponse("todo read book");
+        Files.delete(storagePath);
+        Files.delete(storagePath.getParent());
+        Files.writeString(storagePath.getParent(), "not a directory");
+
+        String response = pathfinder.getResponse("priority 1 high");
+
+        assertEquals("Oopsies! I couldn't save your tasks. Your latest change was undone.",
+                response);
+        assertEquals("Here are your tasks:\n1. [T][ ] read book", pathfinder.getResponse("list"));
+    }
+
+    @Test
+    void getResponse_repeatedPriorityWhenStorageUnavailable_succeedsWithoutSaving()
+            throws IOException {
+        Path storagePath = temporaryDirectory.resolve("data/pathfinder.txt");
+        Pathfinder pathfinder = new Pathfinder(storagePath);
+        pathfinder.getResponse("todo read book");
+        pathfinder.getResponse("priority 1 high");
+        Files.delete(storagePath);
+        Files.delete(storagePath.getParent());
+        Files.writeString(storagePath.getParent(), "not a directory");
+
+        String response = pathfinder.getResponse("priority 1 HIGH");
+
+        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+                + "[T][ ][HIGH] read book", response);
     }
 
     /** Creates Pathfinder with an isolated data file for one test. */

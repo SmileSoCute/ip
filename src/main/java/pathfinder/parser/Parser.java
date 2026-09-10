@@ -6,11 +6,16 @@ import java.util.Locale;
 import pathfinder.exception.PathfinderException;
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
+import pathfinder.task.Priority;
 import pathfinder.task.TodoTask;
 import pathfinder.util.DateTimeParser;
 
 /** Interprets raw user input and validates command arguments. */
 public final class Parser {
+    /** Holds the task number and priority parsed from a priority command. */
+    public record PriorityCommand(int taskNumber, Priority priority) {
+    }
+
     /** Prevents instantiation of this utility class. */
     private Parser() {
     }
@@ -66,6 +71,44 @@ public final class Parser {
     public static int parseTaskNumber(String input, String command)
             throws PathfinderException {
         String numberText = parseDescription(input, command);
+        return parsePositiveTaskNumber(numberText);
+    }
+
+    /**
+     * Parses the task number and level from a priority command.
+     *
+     * @param input complete priority command.
+     * @return parsed task number and priority.
+     * @throws PathfinderException if the command does not contain a valid number and level.
+     */
+    public static PriorityCommand parsePriorityCommand(String input)
+            throws PathfinderException {
+        String[] fields = input.split("\\s+");
+        if (fields.length != 3) {
+            throw new PathfinderException("Oopsies! Use priority TASK_NUMBER LEVEL.");
+        }
+
+        int taskNumber = parsePositiveTaskNumber(fields[1]);
+        Priority priority = switch (fields[2].toLowerCase(Locale.ROOT)) {
+            case "high" -> Priority.HIGH;
+            case "medium" -> Priority.MEDIUM;
+            case "low" -> Priority.LOW;
+            case "none" -> Priority.NONE;
+            default -> throw new PathfinderException(
+                    "Oopsies! Priority must be high, medium, low, or none.");
+        };
+        return new PriorityCommand(taskNumber, priority);
+    }
+
+    /**
+     * Parses a positive whole task number.
+     *
+     * @param numberText text containing the task number.
+     * @return parsed task number.
+     * @throws PathfinderException if the number is malformed or too large.
+     */
+    private static int parsePositiveTaskNumber(String numberText)
+            throws PathfinderException {
         if (!numberText.matches("[0-9]+")) {
             throw new PathfinderException(
                     "Oopsies! Please provide one positive whole task number.");

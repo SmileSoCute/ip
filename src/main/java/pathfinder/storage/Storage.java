@@ -13,6 +13,7 @@ import java.util.List;
 
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
+import pathfinder.task.Priority;
 import pathfinder.task.Task;
 import pathfinder.task.TodoTask;
 import pathfinder.util.DateTimeParser;
@@ -98,17 +99,18 @@ public class Storage {
     private String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         String description = encode(task.getDescription());
+        String priority = task.getPriority().name();
         if (task instanceof DeadlineTask deadline) {
             return "D | " + status + " | " + description + " | "
-                    + encode(DateTimeParser.formatStored(deadline.getBy()));
+                    + encode(DateTimeParser.formatStored(deadline.getBy())) + " | " + priority;
         }
         if (task instanceof EventTask event) {
             return "E | " + status + " | " + description + " | "
                     + encode(DateTimeParser.formatStored(event.getFrom())) + " | "
-                    + encode(DateTimeParser.formatStored(event.getTo()));
+                    + encode(DateTimeParser.formatStored(event.getTo())) + " | " + priority;
         }
         if (task instanceof TodoTask) {
-            return "T | " + status + " | " + description;
+            return "T | " + status + " | " + description + " | " + priority;
         }
         throw new IllegalArgumentException("Unsupported task class: " + task.getClass().getName());
     }
@@ -131,25 +133,29 @@ public class Storage {
             throw new IllegalArgumentException("Invalid task record");
         }
 
-        String description = decodeRequired(fields[2]);
-        Task task = switch (fields[0]) {
-            case "T" -> {
-                requireFieldCount(fields, 3);
-                yield new TodoTask(description);
-            }
-            case "D" -> {
-                requireFieldCount(fields, 4);
-                yield new DeadlineTask(description,
-                        DateTimeParser.parseStored(decodeRequired(fields[3])));
-            }
-            case "E" -> {
-                requireFieldCount(fields, 5);
-                yield new EventTask(description,
-                        DateTimeParser.parseStored(decodeRequired(fields[3])),
-                        DateTimeParser.parseStored(decodeRequired(fields[4])));
-            }
+        int previousFieldCount = switch (fields[0]) {
+            case "T" -> 3;
+            case "D" -> 4;
+            case "E" -> 5;
             default -> throw new IllegalArgumentException("Unknown task type");
         };
+        requireFieldCount(fields, previousFieldCount, previousFieldCount + 1);
+
+        String description = decodeRequired(fields[2]);
+        Task task = switch (fields[0]) {
+            case "T" -> new TodoTask(description);
+            case "D" -> new DeadlineTask(description,
+                    DateTimeParser.parseStored(decodeRequired(fields[3])));
+            case "E" -> new EventTask(description,
+                    DateTimeParser.parseStored(decodeRequired(fields[3])),
+                    DateTimeParser.parseStored(decodeRequired(fields[4])));
+            default -> throw new AssertionError("Task type should be validated");
+        };
+
+        Priority priority = fields.length == previousFieldCount
+                ? Priority.NONE
+                : Priority.valueOf(fields[previousFieldCount]);
+        task.setPriority(priority);
 
         if (fields[1].equals("1")) {
             task.markAsDone();
@@ -270,11 +276,16 @@ public class Storage {
      * Checks that a record contains exactly the fields required by its task type.
      *
      * @param fields fields parsed from the record
-     * @param expectedCount required number of fields
-     * @throws IllegalArgumentException if the field count differs from the expected count
+     * @param expectedCounts permitted numbers of fields.
+     * @throws IllegalArgumentException if the field count is not permitted.
      */
-    private void requireFieldCount(String[] fields, int expectedCount) {
-        if (fields.length != expectedCount) {
+    private void requireFieldCount(String[] fields, int... expectedCounts) {
+        for (int expectedCount : expectedCounts) {
+            if (fields.length == expectedCount) {
+                return;
+            }
+        }
+        if (expectedCounts.length > 0) {
             throw new IllegalArgumentException("Incorrect field count");
         }
     }

@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import pathfinder.exception.PathfinderException;
 import pathfinder.parser.Parser;
 import pathfinder.storage.Storage;
+import pathfinder.task.Priority;
 import pathfinder.task.Task;
 import pathfinder.ui.Ui;
 
@@ -126,6 +127,10 @@ public class Pathfinder {
             case "unmark" -> unmarkTask(Parser.parseTaskNumber(input, "unmark"));
             case "delete" -> deleteTask(Parser.parseTaskNumber(input, "delete"));
             case "find" -> findTasks(Parser.parseFindKeyword(input));
+            case "priority" -> {
+                Parser.PriorityCommand priorityCommand = Parser.parsePriorityCommand(input);
+                yield setTaskPriority(priorityCommand.taskNumber(), priorityCommand.priority());
+            }
             case "todo" -> addTask(Parser.parseTodo(input));
             case "deadline" -> addTask(Parser.parseDeadline(input));
             case "event" -> addTask(Parser.parseEvent(input));
@@ -222,6 +227,43 @@ public class Pathfinder {
         assert number >= 1 && number <= tasks.size()
                 : "Validated task number should be within the task list";
         return tasks.get(number - 1);
+    }
+
+    /**
+     * Changes a task's priority and restores its previous priority if saving fails.
+     *
+     * @param number one-based number of the task to update.
+     * @param priority priority to assign.
+     * @return confirmation message for the updated task.
+     * @throws PathfinderException if the task number is invalid.
+     * @throws IOException if the updated list cannot be saved.
+     */
+    private String setTaskPriority(int number, Priority priority)
+            throws PathfinderException, IOException {
+        Task task = getTask(number);
+        Priority previousPriority = task.getPriority();
+        if (previousPriority == priority) {
+            return getPriorityUpdateMessage(task, priority);
+        }
+
+        task.setPriority(priority);
+        try {
+            storage.save(tasks);
+        } catch (IOException exception) {
+            task.setPriority(previousPriority);
+            assert task.getPriority() == previousPriority
+                    : "Failed priority update should restore the previous priority";
+            throw exception;
+        }
+        return getPriorityUpdateMessage(task, priority);
+    }
+
+    /** Returns the confirmation shown after assigning or clearing a priority. */
+    private String getPriorityUpdateMessage(Task task, Priority priority) {
+        if (priority == Priority.NONE) {
+            return "Alrighty friend! This task now has no priority:\n" + task;
+        }
+        return "Alrighty friend! This task now has " + priority + " priority:\n" + task;
     }
 
     /**

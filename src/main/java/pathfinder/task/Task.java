@@ -4,6 +4,7 @@ package pathfinder.task;
 public class Task {
     private final String description;
     private boolean isDone;
+    private Priority priority;
 
     /**
      * Creates an incomplete task with the given description.
@@ -15,6 +16,7 @@ public class Task {
         assert !description.isBlank() : "Task description should not be blank";
         this.description = description;
         this.isDone = false;
+        this.priority = Priority.NONE;
     }
 
     /** Marks this task as completed. */
@@ -37,13 +39,32 @@ public class Task {
     }
 
     /**
+     * Returns the priority assigned to this task.
+     *
+     * @return assigned priority.
+     */
+    public Priority getPriority() {
+        return priority;
+    }
+
+    /**
+     * Changes the priority assigned to this task.
+     *
+     * @param priority new priority.
+     */
+    public void setPriority(Priority priority) {
+        assert priority != null : "Task priority should not be null";
+        this.priority = priority;
+    }
+
+    /**
      * Returns the completion marker followed by the task description.
      *
      * @return The user-facing task representation.
      */
     @Override
     public String toString() {
-        return (isDone ? "[X] " : "[ ] ") + description;
+        return (isDone ? "[X]" : "[ ]") + priority.getDisplayMarker() + " " + description;
     }
 
     /**

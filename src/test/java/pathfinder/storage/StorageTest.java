@@ -18,6 +18,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import pathfinder.task.DeadlineTask;
 import pathfinder.task.EventTask;
+import pathfinder.task.Priority;
 import pathfinder.task.Task;
 import pathfinder.task.TodoTask;
 
@@ -41,12 +42,15 @@ class StorageTest {
         Storage storage = createStorage();
         ArrayList<Task> tasks = new ArrayList<>();
         TodoTask todo = new TodoTask("read | book");
+        todo.setPriority(Priority.HIGH);
         DeadlineTask deadline = new DeadlineTask("return book",
                 LocalDateTime.of(2019, 12, 2, 18, 0));
         deadline.markAsDone();
+        deadline.setPriority(Priority.MEDIUM);
         EventTask event = new EventTask("project meeting",
                 LocalDateTime.of(2019, 12, 3, 14, 0),
                 LocalDateTime.of(2019, 12, 3, 16, 0));
+        event.setPriority(Priority.LOW);
         tasks.add(todo);
         tasks.add(deadline);
         tasks.add(event);
@@ -60,10 +64,13 @@ class StorageTest {
         EventTask loadedEvent = assertInstanceOf(EventTask.class, loaded.get(2));
         assertEquals("read | book", loadedTodo.getDescription());
         assertFalse(loadedTodo.isDone());
+        assertEquals(Priority.HIGH, loadedTodo.getPriority());
         assertEquals("return book", loadedDeadline.getDescription());
         assertTrue(loadedDeadline.isDone());
+        assertEquals(Priority.MEDIUM, loadedDeadline.getPriority());
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), loadedDeadline.getBy());
         assertEquals("project meeting", loadedEvent.getDescription());
+        assertEquals(Priority.LOW, loadedEvent.getPriority());
         assertEquals(LocalDateTime.of(2019, 12, 3, 14, 0), loadedEvent.getFrom());
         assertEquals(LocalDateTime.of(2019, 12, 3, 16, 0), loadedEvent.getTo());
     }
@@ -77,7 +84,7 @@ class StorageTest {
 
         storage.save(tasks);
 
-        assertEquals("T | 0 | cmVhZCB8IGJvb2s" + System.lineSeparator(),
+        assertEquals("T | 0 | cmVhZCB8IGJvb2s | NONE" + System.lineSeparator(),
                 Files.readString(dataFile, StandardCharsets.UTF_8));
     }
 
@@ -138,6 +145,7 @@ class StorageTest {
         assertEquals(3, loaded.size());
         assertInstanceOf(TodoTask.class, loaded.get(0));
         assertTrue(loaded.get(0).isDone());
+        assertEquals(Priority.NONE, loaded.get(0).getPriority());
         DeadlineTask deadline = assertInstanceOf(DeadlineTask.class, loaded.get(1));
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), deadline.getBy());
         EventTask event = assertInstanceOf(EventTask.class, loaded.get(2));
@@ -162,7 +170,28 @@ class StorageTest {
 
         assertEquals(1, loaded.size());
         assertEquals("read book", loaded.get(0).getDescription());
+        assertEquals(Priority.NONE, loaded.get(0).getPriority());
         assertEquals(3, storage.getSkippedLineCount());
+    }
+
+    @Test
+    void load_mixedPriorityRecords_skipsUnknownAndDefaultsOldFormat() throws IOException {
+        Path dataFile = dataFile();
+        Files.createDirectories(dataFile.getParent());
+        Files.writeString(dataFile, String.join(System.lineSeparator(),
+                "T | 0 | cmVhZCBib29r | URGENT",
+                "T | 0 | d3JpdGUgY29kZQ | HIGH",
+                "T | 0 | cmVhZCBub3Rlcw"), StandardCharsets.UTF_8);
+        Storage storage = new Storage(dataFile);
+
+        ArrayList<Task> loaded = storage.load();
+
+        assertEquals(2, loaded.size());
+        assertEquals("write code", loaded.get(0).getDescription());
+        assertEquals(Priority.HIGH, loaded.get(0).getPriority());
+        assertEquals("read notes", loaded.get(1).getDescription());
+        assertEquals(Priority.NONE, loaded.get(1).getPriority());
+        assertEquals(1, storage.getSkippedLineCount());
     }
 
     @Test
