@@ -146,6 +146,7 @@ public final class Parser {
             throw new PathfinderException(
                     "Oopsies! An event's '/to' time must be after its '/from' time.");
         }
+        assert to.isAfter(from) : "Validated event end should be after its start";
         return new EventTask(description, from, to);
     }
 
@@ -159,6 +160,11 @@ public final class Parser {
      */
     private static String parseDescription(String input, String command)
             throws PathfinderException {
+        assert input.length() >= command.length()
+                && input.substring(0, command.length()).equalsIgnoreCase(command)
+                && (input.length() == command.length()
+                        || Character.isWhitespace(input.charAt(command.length())))
+                : "Input should begin with the expected command";
         String description = input.substring(command.length()).trim();
         if (description.isEmpty()) {
             throw new PathfinderException(

@@ -55,10 +55,22 @@ class ParserTest {
     }
 
     @Test
+    void parseTodo_tabSeparator_returnsTodo() throws PathfinderException {
+        TodoTask task = Parser.parseTodo("todo\tread book");
+
+        assertEquals("read book", task.getDescription());
+    }
+
+    @Test
     void parseTodo_emptyDescription_throwsPathfinderException() {
         PathfinderException exception = assertThrows(
                 PathfinderException.class, () -> Parser.parseTodo("todo"));
         assertEquals("Oopsies! A todo needs a description, friend!", exception.getMessage());
+    }
+
+    @Test
+    void parseTodo_mismatchedCommand_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> Parser.parseTodo("list read book"));
     }
 
     @Test

@@ -37,6 +37,19 @@ class PathfinderTest {
     }
 
     @Test
+    void getResponse_unmarkCommand_updatesStoredTask() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+        pathfinder.getResponse("mark 1");
+
+        String unmarkResponse = pathfinder.getResponse("unmark 1");
+        Pathfinder reloadedPathfinder = createPathfinder();
+
+        assertEquals("Alright man, I have unmarked this task for you:\n[T][ ] read book", unmarkResponse);
+        assertEquals("Here are your tasks:\n1. [T][ ] read book", reloadedPathfinder.getResponse("list"));
+    }
+
+    @Test
     void getResponse_invalidCommand_returnsExistingErrorMessage() {
         Pathfinder pathfinder = createPathfinder();
 
