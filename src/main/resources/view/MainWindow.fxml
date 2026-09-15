@@ -4,9 +4,10 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="400.0"
+<AnchorPane prefHeight="680.0" prefWidth="520.0"
             stylesheets="@../css/main.css"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -15,32 +16,27 @@
         <ScrollPane fx:id="scrollPane"
                     fitToWidth="true"
                     hbarPolicy="NEVER"
-                    prefHeight="557.0"
-                    prefWidth="400.0"
-                    vbarPolicy="ALWAYS"
-                    AnchorPane.bottomAnchor="43.0"
-                    AnchorPane.leftAnchor="1.0"
-                    AnchorPane.rightAnchor="1.0"
-                    AnchorPane.topAnchor="1.0">
+                    vbarPolicy="AS_NEEDED"
+                    AnchorPane.bottomAnchor="70.0"
+                    AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="0.0">
             <content>
                 <VBox fx:id="dialogContainer" />
             </content>
         </ScrollPane>
-        <TextField fx:id="userInput"
-                   onAction="#handleUserInput"
-                   prefHeight="41.0"
-                   prefWidth="324.0"
-                   promptText="Type a command..."
-                   AnchorPane.bottomAnchor="1.0"
-                   AnchorPane.leftAnchor="1.0"
-                   AnchorPane.rightAnchor="77.0" />
-        <Button fx:id="sendButton"
-                mnemonicParsing="false"
-                onAction="#handleUserInput"
-                prefHeight="41.0"
-                prefWidth="76.0"
-                text="Send"
-                AnchorPane.bottomAnchor="1.0"
-                AnchorPane.rightAnchor="1.0" />
+        <HBox spacing="10.0" styleClass="composer"
+              AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
+            <TextField fx:id="userInput"
+                       HBox.hgrow="ALWAYS"
+                       onAction="#handleUserInput"
+                       promptText="Type a command..." />
+            <Button fx:id="sendButton"
+                    mnemonicParsing="false"
+                    onAction="#handleUserInput"
+                    text="Send" />
+        </HBox>
     </children>
 </AnchorPane>

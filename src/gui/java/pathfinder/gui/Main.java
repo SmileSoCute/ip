@@ -22,8 +22,11 @@ public class Main extends Application {
             Scene scene = new Scene(mainWindow);
             stage.setScene(scene);
             stage.setTitle("Pathfinder");
-            stage.setMinHeight(280);
-            stage.setMinWidth(417);
+            stage.setMinHeight(360);
+            stage.setMinWidth(440);
+            stage.setWidth(520);
+            stage.setHeight(680);
+            stage.setResizable(true);
             fxmlLoader.<MainWindow>getController().setPathfinder(pathfinder);
             stage.show();
         } catch (IOException exception) {

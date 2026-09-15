@@ -12,9 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 /** Represents one chat message with a speaker image and message text. */
 public class DialogBox extends HBox {
+    private static final String ERROR_PREFIX = "Oopsies!";
+
     @FXML
     private Label dialog;
     @FXML
@@ -38,6 +41,8 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(image);
+        dialog.maxWidthProperty().bind(widthProperty().subtract(72));
+        HBox.setHgrow(dialog, Priority.NEVER);
     }
 
     /** Flips the dialog box to the left for Pathfinder messages. */
@@ -55,6 +60,11 @@ public class DialogBox extends HBox {
      * @param commandStyle category derived from the user's command.
      */
     private void changeDialogStyle(String commandStyle) {
+        if (dialog.getText().startsWith(ERROR_PREFIX)) {
+            dialog.getStyleClass().add("error-label");
+            return;
+        }
+
         switch (commandStyle) {
             case "add" -> dialog.getStyleClass().add("add-label");
             case "mark" -> dialog.getStyleClass().add("marked-label");
