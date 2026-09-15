@@ -150,6 +150,9 @@ public final class Parser {
             throw new PathfinderException(
                     "Oopsies! A deadline needs '/by' followed by a date or time.");
         }
+        if (countOccurrences(details, " /by ") != 1) {
+            throw new PathfinderException("Oopsies! A deadline needs exactly one '/by' value.");
+        }
 
         String description = details.substring(0, byIndex).trim();
         String byText = details.substring(byIndex + 5).trim();
@@ -174,6 +177,11 @@ public final class Parser {
         int toIndex = details.indexOf(" /to ");
         if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
             throw new PathfinderException("Oopsies! An event needs '/from' before '/to'.");
+        }
+        if (countOccurrences(details, " /from ") != 1
+                || countOccurrences(details, " /to ") != 1) {
+            throw new PathfinderException(
+                    "Oopsies! An event needs one '/from' value and one '/to' value.");
         }
 
         String description = details.substring(0, fromIndex).trim();
@@ -214,5 +222,22 @@ public final class Parser {
                     "Oopsies! A " + command + " needs a description, friend!");
         }
         return description;
+    }
+
+    /**
+     * Counts non-overlapping occurrences of a marker in text.
+     *
+     * @param text text to inspect.
+     * @param marker marker to count.
+     * @return number of marker occurrences.
+     */
+    private static int countOccurrences(String text, String marker) {
+        int count = 0;
+        int index = 0;
+        while ((index = text.indexOf(marker, index)) >= 0) {
+            count++;
+            index += marker.length();
+        }
+        return count;
     }
 }

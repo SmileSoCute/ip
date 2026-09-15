@@ -171,6 +171,15 @@ class ParserTest {
     }
 
     @Test
+    void parseDeadline_duplicateByMarker_throwsPathfinderException() {
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseDeadline(
+                        "deadline homework /by 2019-12-02 /by 2019-12-03"));
+
+        assertEquals("Oopsies! A deadline needs exactly one '/by' value.", exception.getMessage());
+    }
+
+    @Test
     void parseEvent_validCommand_returnsEvent() throws PathfinderException {
         EventTask task = Parser.parseEvent(
                 "event project meeting /from 2019-12-03 1400 /to 2019-12-03 1600");
@@ -186,6 +195,17 @@ class ParserTest {
                 PathfinderException.class, () -> Parser.parseEvent(
                         "event meeting /to 2019-12-03 1600 /from 2019-12-03 1400"));
         assertEquals("Oopsies! An event needs '/from' before '/to'.", exception.getMessage());
+    }
+
+    @Test
+    void parseEvent_duplicateMarker_throwsPathfinderException() {
+        PathfinderException exception = assertThrows(
+                PathfinderException.class, () -> Parser.parseEvent(
+                        "event meeting /from 2019-12-03 1400 /to 2019-12-03 1600"
+                                + " /to 2019-12-03 1700"));
+
+        assertEquals("Oopsies! An event needs one '/from' value and one '/to' value.",
+                exception.getMessage());
     }
 
     @Test

@@ -41,6 +41,19 @@ public class EventTask extends Task {
     }
 
     /**
+     * Returns whether another task has the same description and time range.
+     *
+     * @param other task to compare with this event.
+     * @return whether both events have the same user-entered details.
+     */
+    @Override
+    public boolean hasSameDetails(Task other) {
+        return super.hasSameDetails(other) && other instanceof EventTask event
+                && startDateTime.equals(event.startDateTime)
+                && endDateTime.equals(event.endDateTime);
+    }
+
+    /**
      * Returns this task with its event type marker and formatted time range.
      *
      * @return the user-facing event representation

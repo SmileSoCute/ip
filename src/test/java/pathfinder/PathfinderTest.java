@@ -27,6 +27,17 @@ class PathfinderTest {
     }
 
     @Test
+    void getResponse_duplicateTask_rejectsSecondTaskAndPreservesList() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+
+        String duplicateResponse = pathfinder.getResponse("todo READ BOOK");
+
+        assertEquals("Oopsies! That task is already in your list, friend!", duplicateResponse);
+        assertEquals("Here are your tasks:\n1. [T][ ] read book", pathfinder.getResponse("list"));
+    }
+
+    @Test
     void getResponse_markCommand_updatesStoredTask() {
         Pathfinder pathfinder = createPathfinder();
         pathfinder.getResponse("todo read book");

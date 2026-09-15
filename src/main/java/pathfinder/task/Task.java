@@ -58,6 +58,18 @@ public class Task {
     }
 
     /**
+     * Returns whether another task has the same user-entered details.
+     * Completion status and priority do not affect whether two tasks are duplicates.
+     *
+     * @param other task to compare with this task.
+     * @return whether both tasks have the same type and description.
+     */
+    public boolean hasSameDetails(Task other) {
+        return other != null && getClass().equals(other.getClass())
+                && description.equalsIgnoreCase(other.description);
+    }
+
+    /**
      * Returns the completion marker followed by the task description.
      *
      * @return The user-facing task representation.

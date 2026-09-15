@@ -316,7 +316,11 @@ public class Pathfinder {
      * @return confirmation message for the new task.
      * @throws IOException if the updated list cannot be saved.
      */
-    private String addTask(Task task) throws IOException {
+    private String addTask(Task task) throws PathfinderException, IOException {
+        if (tasks.stream().anyMatch(existingTask -> existingTask.hasSameDetails(task))) {
+            throw new PathfinderException("Oopsies! That task is already in your list, friend!");
+        }
+
         tasks.add(task);
         try {
             storage.save(tasks);
