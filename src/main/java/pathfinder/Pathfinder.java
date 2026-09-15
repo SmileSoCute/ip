@@ -163,7 +163,7 @@ public class Pathfinder {
             assert !task.isDone() : "Failed mark should restore the incomplete status";
             throw exception;
         }
-        return "Awesome sauce! I have marked this task up dude:\n" + task;
+        return "Awesome sauce! I've marked this task as done, dude:\n" + task;
     }
 
     /**
@@ -189,7 +189,7 @@ public class Pathfinder {
             assert task.isDone() : "Failed unmark should restore the completed status";
             throw exception;
         }
-        return "Alright man, I have unmarked this task for you:\n" + task;
+        return "Alright, man! I've unmarked this task for you:\n" + task;
     }
 
     /**
@@ -209,8 +209,8 @@ public class Pathfinder {
             tasks.add(number - 1, removed);
             throw exception;
         }
-        return "Got it my friend! I've removed this task:\n " + removed
-                + "\n Alrighty currently you have " + tasks.size() + " task(s) in the list yay!";
+        return "Got it, my friend! I've removed this task:\n " + removed
+                + "\nAlrighty! You currently have " + tasks.size() + " task(s) in the list, yay!";
     }
 
     /**
@@ -261,9 +261,9 @@ public class Pathfinder {
     /** Returns the confirmation shown after assigning or clearing a priority. */
     private String getPriorityUpdateMessage(Task task, Priority priority) {
         if (priority == Priority.NONE) {
-            return "Alrighty friend! This task now has no priority:\n" + task;
+            return "Alrighty, friend! This task now has no priority:\n" + task;
         }
-        return "Alrighty friend! This task now has " + priority + " priority:\n" + task;
+        return "Alrighty, friend! This task now has " + priority + " priority:\n" + task;
     }
 
     /**
@@ -306,7 +306,7 @@ public class Pathfinder {
         return IntStream.range(0, matchingTasks.size())
                 .mapToObj(index -> (index + 1) + ". " + matchingTasks.get(index))
                 .collect(Collectors.joining("\n",
-                        "Alrighty friend! Here are the matching tasks I found:\n", ""));
+                        "Alrighty, friend! Here are the matching tasks I found:\n", ""));
     }
 
     /**
@@ -325,7 +325,7 @@ public class Pathfinder {
             throw exception;
         }
 
-        return "Okay! I've got it friend! I've added this task:\n " + task
-                + "\nAlrighty currently u have " + tasks.size() + " task(s) in the list yay!";
+        return "Okay! I've got it, friend! I've added this task:\n " + task
+                + "\nAlrighty! You currently have " + tasks.size() + " task(s) in the list, yay!";
     }
 }

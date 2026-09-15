@@ -21,8 +21,8 @@ class PathfinderTest {
         String addResponse = pathfinder.getResponse("todo read book");
         String listResponse = pathfinder.getResponse("list");
 
-        assertEquals("Okay! I've got it friend! I've added this task:\n [T][ ] read book"
-                + "\nAlrighty currently u have 1 task(s) in the list yay!", addResponse);
+        assertEquals("Okay! I've got it, friend! I've added this task:\n [T][ ] read book"
+                + "\nAlrighty! You currently have 1 task(s) in the list, yay!", addResponse);
         assertEquals("Here are your tasks:\n1. [T][ ] read book", listResponse);
     }
 
@@ -34,7 +34,7 @@ class PathfinderTest {
         String markResponse = pathfinder.getResponse("mark 1");
         Pathfinder reloadedPathfinder = createPathfinder();
 
-        assertEquals("Awesome sauce! I have marked this task up dude:\n[T][X] read book", markResponse);
+        assertEquals("Awesome sauce! I've marked this task as done, dude:\n[T][X] read book", markResponse);
         assertEquals("Here are your tasks:\n1. [T][X] read book", reloadedPathfinder.getResponse("list"));
     }
 
@@ -47,7 +47,7 @@ class PathfinderTest {
         String unmarkResponse = pathfinder.getResponse("unmark 1");
         Pathfinder reloadedPathfinder = createPathfinder();
 
-        assertEquals("Alright man, I have unmarked this task for you:\n[T][ ] read book", unmarkResponse);
+        assertEquals("Alright, man! I've unmarked this task for you:\n[T][ ] read book", unmarkResponse);
         assertEquals("Here are your tasks:\n1. [T][ ] read book", reloadedPathfinder.getResponse("list"));
     }
 
@@ -68,7 +68,7 @@ class PathfinderTest {
 
         String response = pathfinder.getResponse("find book");
 
-        assertEquals("Alrighty friend! Here are the matching tasks I found:\n"
+        assertEquals("Alrighty, friend! Here are the matching tasks I found:\n"
                 + "1. [T][ ] read book\n"
                 + "2. [T][ ][HIGH] return BOOK", response);
     }
@@ -82,7 +82,7 @@ class PathfinderTest {
         pathfinder.getResponse("mark 1");
         Pathfinder reloadedPathfinder = createPathfinder();
 
-        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+        assertEquals("Alrighty, friend! This task now has HIGH priority:\n"
                 + "[T][ ][HIGH] read book", priorityResponse);
         assertEquals("Here are your tasks:\n1. [T][X][HIGH] read book",
                 reloadedPathfinder.getResponse("list"));
@@ -98,11 +98,11 @@ class PathfinderTest {
         String replaceResponse = pathfinder.getResponse("priority 1 medium");
         String clearResponse = pathfinder.getResponse("priority 1 none");
 
-        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+        assertEquals("Alrighty, friend! This task now has HIGH priority:\n"
                 + "[T][ ][HIGH] read book", repeatResponse);
-        assertEquals("Alrighty friend! This task now has MEDIUM priority:\n"
+        assertEquals("Alrighty, friend! This task now has MEDIUM priority:\n"
                 + "[T][ ][MEDIUM] read book", replaceResponse);
-        assertEquals("Alrighty friend! This task now has no priority:\n"
+        assertEquals("Alrighty, friend! This task now has no priority:\n"
                 + "[T][ ] read book", clearResponse);
         assertEquals("Here are your tasks:\n1. [T][ ] read book", pathfinder.getResponse("list"));
     }
@@ -136,7 +136,7 @@ class PathfinderTest {
 
         String response = pathfinder.getResponse("priority 1 HIGH");
 
-        assertEquals("Alrighty friend! This task now has HIGH priority:\n"
+        assertEquals("Alrighty, friend! This task now has HIGH priority:\n"
                 + "[T][ ][HIGH] read book", response);
     }
 

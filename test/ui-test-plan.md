@@ -20,8 +20,8 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
@@ -50,8 +50,8 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
@@ -87,16 +87,16 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [T][ ] read book
-Alrighty currently u have 1 task(s) in the list yay!
+Alrighty! You currently have 1 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Awesome sauce! I have marked this task up dude:
+Awesome sauce! I've marked this task as done, dude:
 [T][X] read book
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
@@ -135,8 +135,8 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
 Oh no friend! You didn't enter anything!
@@ -202,26 +202,26 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [T][ ] read book
-Alrighty currently u have 1 task(s) in the list yay!
+Alrighty! You currently have 1 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! That task is already marked as not done.
 ____________________________________________________________
 ____________________________________________________________
-Awesome sauce! I have marked this task up dude:
+Awesome sauce! I've marked this task as done, dude:
 [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! That task is already marked as done.
 ____________________________________________________________
 ____________________________________________________________
-Alright man, I have unmarked this task for you:
+Alright, man! I've unmarked this task for you:
 [T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
@@ -231,9 +231,9 @@ ____________________________________________________________
 Oopsies! That task number doesn't exist, friend!
 ____________________________________________________________
 ____________________________________________________________
-Got it my friend! I've removed this task:
+Got it, my friend! I've removed this task:
  [T][ ] read book
- Alrighty currently you have 0 task(s) in the list yay!
+Alrighty! You currently have 0 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
 Your task list is empty, friend!
@@ -272,8 +272,8 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
 Heads up! I skipped 4 invalid saved task(s).
@@ -314,23 +314,23 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [D][ ] return book (by: Dec 2 2019 6:00 PM)
-Alrighty currently u have 1 task(s) in the list yay!
+Alrighty! You currently have 1 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [D][ ] date only (by: Dec 2 2019 12:00 AM)
-Alrighty currently u have 2 task(s) in the list yay!
+Alrighty! You currently have 2 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
-Alrighty currently u have 3 task(s) in the list yay!
+Alrighty! You currently have 3 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
 Here are your tasks:
@@ -368,8 +368,8 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! Use yyyy-MM-dd or d/M/yyyy, optionally followed by HHmm.
@@ -405,23 +405,23 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [T][ ] read | book
-Alrighty currently u have 1 task(s) in the list yay!
+Alrighty! You currently have 1 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [D][ ] return | book (by: Dec 2 2019 6:00 PM)
-Alrighty currently u have 2 task(s) in the list yay!
+Alrighty! You currently have 2 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [E][ ] project | meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
-Alrighty currently u have 3 task(s) in the list yay!
+Alrighty! You currently have 3 task(s) in the list, yay!
 ____________________________________________________________
 Bye bye! Hope to see you around soon!
 ____________________________________________________________
@@ -460,16 +460,16 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! Here are the matching tasks I found:
+Alrighty, friend! Here are the matching tasks I found:
 1. [T][X] read book
 2. [D][ ] Return BOOK (by: Dec 2 2019 6:00 PM)
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! Here are the matching tasks I found:
+Alrighty, friend! Here are the matching tasks I found:
 1. [E][ ] team meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)
 ____________________________________________________________
 ____________________________________________________________
@@ -516,51 +516,51 @@ ____________________________________________________________
 /================\
 |   Pathfinder   |
 \================/
-Hello friend! My name is Pathfinder.
-What tasks can I do for you today?
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! Use priority TASK_NUMBER LEVEL.
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [T][ ] read book
-Alrighty currently u have 1 task(s) in the list yay!
+Alrighty! You currently have 1 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
 Oopsies! Priority must be high, medium, low, or none.
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! This task now has HIGH priority:
+Alrighty, friend! This task now has HIGH priority:
 [T][ ][HIGH] read book
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! This task now has HIGH priority:
+Alrighty, friend! This task now has HIGH priority:
 [T][ ][HIGH] read book
 ____________________________________________________________
 ____________________________________________________________
-Awesome sauce! I have marked this task up dude:
+Awesome sauce! I've marked this task as done, dude:
 [T][X][HIGH] read book
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! This task now has MEDIUM priority:
+Alrighty, friend! This task now has MEDIUM priority:
 [T][X][MEDIUM] read book
 ____________________________________________________________
 ____________________________________________________________
-Alright man, I have unmarked this task for you:
+Alright, man! I've unmarked this task for you:
 [T][ ][MEDIUM] read book
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! This task now has no priority:
+Alrighty, friend! This task now has no priority:
 [T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
-Okay! I've got it friend! I've added this task:
+Okay! I've got it, friend! I've added this task:
  [T][ ] write code
-Alrighty currently u have 2 task(s) in the list yay!
+Alrighty! You currently have 2 task(s) in the list, yay!
 ____________________________________________________________
 ____________________________________________________________
-Alrighty friend! This task now has HIGH priority:
+Alrighty, friend! This task now has HIGH priority:
 [T][ ][HIGH] write code
 ____________________________________________________________
 ____________________________________________________________

@@ -41,7 +41,7 @@ public class MainWindow extends AnchorPane {
     public void setPathfinder(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;
         dialogContainer.getChildren().add(DialogBox.getPathfinderDialog(
-                "Hello friend! My name is Pathfinder.\nWhat tasks can I do for you today?",
+                "Hello, friend! My name is Pathfinder.\nWhat can I help you with today?",
                 pathfinderImage, ""));
         if (!pathfinder.getStartupMessage().isEmpty()) {
             dialogContainer.getChildren().add(DialogBox.getPathfinderDialog(
