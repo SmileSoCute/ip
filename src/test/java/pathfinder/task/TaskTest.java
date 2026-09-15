@@ -44,6 +44,39 @@ class TaskTest {
     }
 
     @Test
+    void hasSameDetails_differentTypeOrEventTimeRange_returnsFalse() {
+        TodoTask todo = new TodoTask("read book");
+        DeadlineTask deadline = new DeadlineTask("read book",
+                LocalDateTime.of(2019, 12, 2, 18, 0));
+        EventTask firstEvent = new EventTask("meeting",
+                LocalDateTime.of(2019, 12, 3, 14, 0),
+                LocalDateTime.of(2019, 12, 3, 16, 0));
+        EventTask differentEvent = new EventTask("meeting",
+                LocalDateTime.of(2019, 12, 3, 14, 0),
+                LocalDateTime.of(2019, 12, 3, 17, 0));
+
+        assertFalse(todo.hasSameDetails(deadline));
+        assertFalse(firstEvent.hasSameDetails(differentEvent));
+        assertFalse(todo.hasSameDetails(null));
+    }
+
+    @Test
+    void taskTypes_toString_formatsTypeDatesAndStatus() {
+        TodoTask todo = new TodoTask("read book");
+        DeadlineTask deadline = new DeadlineTask("return book",
+                LocalDateTime.of(2019, 12, 2, 18, 0));
+        EventTask event = new EventTask("meeting",
+                LocalDateTime.of(2019, 12, 3, 14, 0),
+                LocalDateTime.of(2019, 12, 3, 16, 0));
+        todo.markAsDone();
+
+        assertEquals("[T][X] read book", todo.toString());
+        assertEquals("[D][ ] return book (by: Dec 2 2019 6:00 PM)", deadline.toString());
+        assertEquals("[E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)",
+                event.toString());
+    }
+
+    @Test
     void constructor_nullDescription_throwsAssertionError() {
         assertThrows(AssertionError.class, () -> new Task(null));
     }
