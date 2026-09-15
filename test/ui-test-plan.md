@@ -577,3 +577,53 @@ ____________________________________________________________
 T | 0 | cmVhZCBib29r | NONE
 T | 0 | d3JpdGUgY29kZQ | HIGH
 ```
+
+## Reject duplicate tasks and repeated date-time markers
+
+**Aim:** Verify that duplicate tasks and repeated `/by` or `/to` parameters are rejected without changing data.
+
+**Input:**
+```text
+todo read book
+todo READ BOOK
+deadline homework /by 2019-12-02 /by 2019-12-03
+event meeting /from 2019-12-03 1400 /to 2019-12-03 1600 /to 2019-12-03 1700
+list
+bye
+```
+
+**Expected output:**
+```text
+____________________________________________________________
+/================\
+|   Pathfinder   |
+\================/
+Hello, friend! My name is Pathfinder.
+What can I help you with today?
+____________________________________________________________
+____________________________________________________________
+Okay! I've got it, friend! I've added this task:
+ [T][ ] read book
+Alrighty! You currently have 1 task(s) in the list, yay!
+____________________________________________________________
+____________________________________________________________
+Oopsies! That task is already in your list, friend!
+____________________________________________________________
+____________________________________________________________
+Oopsies! A deadline needs exactly one '/by' value.
+____________________________________________________________
+____________________________________________________________
+Oopsies! An event needs one '/from' value and one '/to' value.
+____________________________________________________________
+____________________________________________________________
+Here are your tasks:
+1. [T][ ] read book
+____________________________________________________________
+Bye bye! Hope to see you around soon!
+____________________________________________________________
+```
+
+**Expected data:**
+```text
+T | 0 | cmVhZCBib29r | NONE
+```

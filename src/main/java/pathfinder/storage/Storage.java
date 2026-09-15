@@ -59,7 +59,12 @@ public class Storage {
                 continue;
             }
             try {
-                tasks.add(parseTask(line));
+                Task task = parseTask(line);
+                if (tasks.stream().anyMatch(existingTask -> existingTask.hasSameDetails(task))) {
+                    skippedLineCount++;
+                } else {
+                    tasks.add(task);
+                }
             } catch (IllegalArgumentException exception) {
                 skippedLineCount++;
             }
@@ -74,7 +79,10 @@ public class Storage {
      * @throws IOException if the temporary or final data file cannot be written
      */
     public void save(ArrayList<Task> tasks) throws IOException {
-        Files.createDirectories(dataFile.getParent());
+        Path parentDirectory = dataFile.getParent();
+        if (parentDirectory != null) {
+            Files.createDirectories(parentDirectory);
+        }
         Path temporaryFile = dataFile.resolveSibling(dataFile.getFileName() + ".tmp");
         List<String> lines = tasks.stream().map(this::formatTask).toList();
         Files.write(temporaryFile, lines, StandardCharsets.UTF_8);

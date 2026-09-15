@@ -195,6 +195,22 @@ class StorageTest {
     }
 
     @Test
+    void load_duplicateRecords_skipsLaterDuplicate() throws IOException {
+        Path dataFile = dataFile();
+        Files.createDirectories(dataFile.getParent());
+        Files.writeString(dataFile, String.join(System.lineSeparator(),
+                "T | 0 | cmVhZCBib29r | NONE",
+                "T | 1 | UkVBRCBCT09L | HIGH"), StandardCharsets.UTF_8);
+        Storage storage = new Storage(dataFile);
+
+        ArrayList<Task> loaded = storage.load();
+
+        assertEquals(1, loaded.size());
+        assertEquals("read book", loaded.get(0).getDescription());
+        assertEquals(1, storage.getSkippedLineCount());
+    }
+
+    @Test
     void load_afterPreviousMalformedLoad_resetsSkippedLineCount() throws IOException {
         Path dataFile = dataFile();
         Files.createDirectories(dataFile.getParent());

@@ -1,7 +1,11 @@
 package pathfinder.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +28,19 @@ class TaskTest {
 
         task.setPriority(Priority.NONE);
         assertEquals("[ ] read book", task.toString());
+    }
+
+    @Test
+    void hasSameDetails_caseInsensitiveDescriptionAndMatchingDates_returnsTrue() {
+        DeadlineTask firstTask = new DeadlineTask("return book",
+                LocalDateTime.of(2019, 12, 2, 18, 0));
+        DeadlineTask matchingTask = new DeadlineTask("RETURN BOOK",
+                LocalDateTime.of(2019, 12, 2, 18, 0));
+        DeadlineTask differentDateTask = new DeadlineTask("return book",
+                LocalDateTime.of(2019, 12, 3, 18, 0));
+
+        assertTrue(firstTask.hasSameDetails(matchingTask));
+        assertFalse(firstTask.hasSameDetails(differentDateTask));
     }
 
     @Test
