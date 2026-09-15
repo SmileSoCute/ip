@@ -38,8 +38,8 @@ public class Ui {
                 + "\\================/\n";
         System.out.println(SEPARATOR);
         System.out.print(banner);
-        System.out.println("Hello friend! My name is Pathfinder.");
-        System.out.println("What tasks can I do for you today?");
+        System.out.println("Hello, friend! My name is Pathfinder.");
+        System.out.println("What can I help you with today?");
         System.out.println(SEPARATOR);
     }
 
