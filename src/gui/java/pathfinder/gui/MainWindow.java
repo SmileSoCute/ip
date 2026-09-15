@@ -22,6 +22,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
+    // The avatar images were generated with OpenAI's image generation tool.
     private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image pathfinderImage = new Image(getClass().getResourceAsStream("/images/DaDuke.png"));
     private Pathfinder pathfinder;
