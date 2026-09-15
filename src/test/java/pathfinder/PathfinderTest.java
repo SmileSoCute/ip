@@ -38,6 +38,54 @@ class PathfinderTest {
     }
 
     @Test
+    void getResponse_blankInputListAndBye_returnsAppropriateMessages() {
+        Pathfinder pathfinder = createPathfinder();
+
+        assertEquals("Oh no friend! You didn't enter anything!", pathfinder.getResponse("   "));
+        assertEquals("Your task list is empty, friend!", pathfinder.getResponse("  list  "));
+        assertEquals("Bye bye! Hope to see you around soon!", pathfinder.getResponse(" BYE "));
+    }
+
+    @Test
+    void getResponse_deadlineEventAndDelete_updatesListInOrder() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("deadline return book /by 2019-12-02 1800");
+        pathfinder.getResponse("event meeting /from 2019-12-03 1400 /to 2019-12-03 1600");
+
+        String deleteResponse = pathfinder.getResponse("delete 1");
+
+        assertEquals("Got it, my friend! I've removed this task:\n "
+                + "[D][ ] return book (by: Dec 2 2019 6:00 PM)\n"
+                + "Alrighty! You currently have 1 task(s) in the list, yay!", deleteResponse);
+        assertEquals("Here are your tasks:\n"
+                + "1. [E][ ] meeting (from: Dec 3 2019 2:00 PM to: Dec 3 2019 4:00 PM)",
+                pathfinder.getResponse("list"));
+    }
+
+    @Test
+    void getResponse_findMissingAndInvalidTaskNumber_returnsErrors() {
+        Pathfinder pathfinder = createPathfinder();
+        pathfinder.getResponse("todo read book");
+
+        assertEquals("Oopsies! I couldn't find any tasks containing \"code\".",
+                pathfinder.getResponse("find code"));
+        assertEquals("Oopsies! That task number doesn't exist, friend!",
+                pathfinder.getResponse("delete 2"));
+    }
+
+    @Test
+    void constructor_malformedData_setsStartupWarningAndLoadsValidTasks() throws IOException {
+        Path storagePath = temporaryDirectory.resolve("data/pathfinder.txt");
+        Files.createDirectories(storagePath.getParent());
+        Files.writeString(storagePath, "invalid record\nT | 0 | cmVhZCBib29r | NONE");
+
+        Pathfinder pathfinder = new Pathfinder(storagePath);
+
+        assertEquals("Heads up! I skipped 1 invalid saved task(s).", pathfinder.getStartupMessage());
+        assertEquals("Here are your tasks:\n1. [T][ ] read book", pathfinder.getResponse("list"));
+    }
+
+    @Test
     void getResponse_markCommand_updatesStoredTask() {
         Pathfinder pathfinder = createPathfinder();
         pathfinder.getResponse("todo read book");
