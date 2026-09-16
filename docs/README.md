@@ -1,67 +1,146 @@
 # Pathfinder User Guide
 
-// Update the title above to match the actual product name
+**Pathfinder** is a friendly task chatbot that helps you keep track of todos,
+deadlines, events, and task priorities.
 
-// Product screenshot goes here
+![Pathfinder GUI](Ui.png)
 
-// Product intro goes here
+## Quick start
 
-## Adding deadlines
+1. Open Pathfinder.
+2. Type a command in the input box at the bottom of the window.
+3. Press <kbd>Enter</kbd> or select **Send**.
+4. Use `list` whenever you want to see all saved tasks.
 
-// Describe the action and its outcome.
+## Command summary
 
-// Give examples of usage
+| Action | Command format |
+| --- | --- |
+| Add a todo | `todo DESCRIPTION` |
+| Add a deadline | `deadline DESCRIPTION /by DATE [TIME]` |
+| Add an event | `event DESCRIPTION /from START_DATE [TIME] /to END_DATE [TIME]` |
+| List tasks | `list` |
+| Mark a task done | `mark TASK_NUMBER` |
+| Mark a task not done | `unmark TASK_NUMBER` |
+| Delete a task | `delete TASK_NUMBER` |
+| Find tasks | `find KEYWORD` |
+| Set priority | `priority TASK_NUMBER LEVEL` |
+| Say goodbye | `bye` |
 
-Example: `keyword (optional arguments)`
+Task numbers are the numbers shown by the `list` command.
 
-// A description of the expected outcome goes here
+## Adding tasks
 
+### Todos
+
+Use a todo for a task without a date or time.
+
+```text
+todo read the textbook
 ```
-expected output
+
+### Deadlines
+
+Use a deadline for a task that must be completed by a specific date or time.
+
+```text
+deadline submit assignment /by 2026-09-20 2359
+```
+
+### Events
+
+Use an event for something with both a start and end date/time.
+
+```text
+event project meeting /from 2026-09-17 1400 /to 2026-09-17 1600
+```
+
+The end date/time must be after the start date/time.
+
+### Supported date formats
+
+Use either of these date formats:
+
+```text
+yyyy-MM-dd
+d/M/yyyy
+```
+
+Time is optional. When included, use 24-hour `HHmm` format.
+
+```text
+deadline birthday /by 17/9/2026
+deadline presentation /by 2026-09-17 1400
+```
+
+## Viewing and finding tasks
+
+### Listing tasks
+
+```text
+list
+```
+
+Pathfinder displays every task with its number, type, completion status, and
+priority where applicable.
+
+### Finding tasks
+
+Search task descriptions without regard to letter case.
+
+```text
+find book
+```
+
+## Updating tasks
+
+### Marking a task as done
+
+```text
+mark 1
+```
+
+### Marking a task as not done
+
+```text
+unmark 1
+```
+
+### Deleting a task
+
+```text
+delete 1
 ```
 
 ## Prioritizing tasks
 
-Use `priority TASK_NUMBER LEVEL` to assign a priority to an existing task.
-The supported levels are `high`, `medium`, `low`, and `none`. Level names
-are case-insensitive.
+Use `priority TASK_NUMBER LEVEL` to assign a priority to a task.
 
-For example, after adding a task, give it high priority:
+Supported levels are `high`, `medium`, `low`, and `none`.
 
 ```text
-todo read book
 priority 1 high
+priority 2 medium
+priority 3 none
 ```
 
-Pathfinder responds to the priority command with:
+Priority levels are case-insensitive. Use `none` to remove a priority.
 
-```text
-Alrighty friend! This task now has HIGH priority:
-[T][ ][HIGH] read book
-```
+## Saving data
 
-Change the level by running the command again with `medium` or `low`.
-Remove the priority using:
+Pathfinder saves tasks automatically after task-changing commands. Your saved
+tasks are loaded the next time you open the application.
 
-```text
-priority 1 none
-```
+## Handling mistakes
 
-Tasks without a priority have no extra marker. Priorities remain attached
-when tasks are marked or unmarked, and they do not change task order or
-task numbers. The `find` command continues to search descriptions only.
+Pathfinder explains common command mistakes, including:
 
-If the command does not contain exactly a task number and a level, Pathfinder
-responds with `Oopsies! Use priority TASK_NUMBER LEVEL.` If the level is not
-one of the four supported names, it responds with
-`Oopsies! Priority must be high, medium, low, or none.` Existing saved tasks
-without a priority remain usable and are treated as having no priority.
+- Missing descriptions or required parameters.
+- Invalid task numbers.
+- Unsupported date formats or impossible dates.
+- Event end times that are not after start times.
+- Repeated `/by`, `/from`, or `/to` parameters.
+- Duplicate tasks.
 
-## Feature ABC
-
-// Feature details
-
-
-## Feature XYZ
-
-// Feature details
+Check the command format and try again when Pathfinder shows an `Oopsies!`
+message.
