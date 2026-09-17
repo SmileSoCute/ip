@@ -5,6 +5,36 @@ deadlines, events, and task priorities.
 
 ![Pathfinder GUI](Ui.png)
 
+## Setting up and running Pathfinder
+
+### Prerequisites
+
+Ensure that Java 25 is installed on your computer.
+
+To check your Java version, open a terminal and run:
+
+```text
+java -version
+```
+
+### Download the application
+
+1. Download `pathfinder.jar` from this project's GitHub Releases page.
+2. Save it in a folder where you would like Pathfinder to keep its data.
+
+### Run Pathfinder
+
+Open a terminal in the folder containing the JAR file and run:
+
+```text
+java -jar pathfinder.jar
+```
+
+The Pathfinder window should appear.
+
+> Note: Pathfinder saves your tasks locally. Keep the JAR in the same folder
+> between uses so that it can continue to access your saved task data.
+
 ## Quick start
 
 1. Open Pathfinder.
