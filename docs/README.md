@@ -174,3 +174,16 @@ Pathfinder explains common command mistakes, including:
 
 Check the command format and try again when Pathfinder shows an `Oopsies!`
 message.
+
+## AI Declaration
+
+This project was developed with assistance from OpenAI Codex. It was used for:
+
+- Reviewing Java code against the SE-EDU coding conventions.
+- Refining code for clarity, consistency, and maintainability.
+- Improving Javadoc punctuation and variable naming.
+- Drafting Git commit messages.
+
+The AI-assisted changes were reviewed and verified using the project's JUnit,
+Checkstyle, and UI test suites. I remain responsible for the final code and
+submission decisions.
