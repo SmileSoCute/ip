@@ -31,9 +31,9 @@ class StorageTest {
     void load_missingFile_returnsEmptyList() throws IOException {
         Storage storage = createStorage();
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertTrue(loaded.isEmpty());
+        assertTrue(loadedTasks.isEmpty());
         assertEquals(0, storage.getSkippedLineCount());
     }
 
@@ -56,12 +56,12 @@ class StorageTest {
         tasks.add(event);
 
         storage.save(tasks);
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(3, loaded.size());
-        TodoTask loadedTodo = assertInstanceOf(TodoTask.class, loaded.get(0));
-        DeadlineTask loadedDeadline = assertInstanceOf(DeadlineTask.class, loaded.get(1));
-        EventTask loadedEvent = assertInstanceOf(EventTask.class, loaded.get(2));
+        assertEquals(3, loadedTasks.size());
+        TodoTask loadedTodo = assertInstanceOf(TodoTask.class, loadedTasks.get(0));
+        DeadlineTask loadedDeadline = assertInstanceOf(DeadlineTask.class, loadedTasks.get(1));
+        EventTask loadedEvent = assertInstanceOf(EventTask.class, loadedTasks.get(2));
         assertEquals("read | book", loadedTodo.getDescription());
         assertFalse(loadedTodo.isDone());
         assertEquals(Priority.HIGH, loadedTodo.getPriority());
@@ -99,10 +99,10 @@ class StorageTest {
         replacementTasks.add(new TodoTask("replacement"));
 
         storage.save(replacementTasks);
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(1, loaded.size());
-        assertEquals("replacement", loaded.get(0).getDescription());
+        assertEquals(1, loadedTasks.size());
+        assertEquals("replacement", loadedTasks.get(0).getDescription());
     }
 
     @Test
@@ -140,15 +140,15 @@ class StorageTest {
                 StandardCharsets.UTF_8);
         Storage storage = new Storage(dataFile);
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(3, loaded.size());
-        assertInstanceOf(TodoTask.class, loaded.get(0));
-        assertTrue(loaded.get(0).isDone());
-        assertEquals(Priority.NONE, loaded.get(0).getPriority());
-        DeadlineTask deadline = assertInstanceOf(DeadlineTask.class, loaded.get(1));
+        assertEquals(3, loadedTasks.size());
+        assertInstanceOf(TodoTask.class, loadedTasks.get(0));
+        assertTrue(loadedTasks.get(0).isDone());
+        assertEquals(Priority.NONE, loadedTasks.get(0).getPriority());
+        DeadlineTask deadline = assertInstanceOf(DeadlineTask.class, loadedTasks.get(1));
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), deadline.getBy());
-        EventTask event = assertInstanceOf(EventTask.class, loaded.get(2));
+        EventTask event = assertInstanceOf(EventTask.class, loadedTasks.get(2));
         assertEquals(LocalDateTime.of(2019, 12, 3, 14, 0), event.getFrom());
         assertEquals(LocalDateTime.of(2019, 12, 3, 16, 0), event.getTo());
         assertEquals(0, storage.getSkippedLineCount());
@@ -166,11 +166,11 @@ class StorageTest {
                 "T | 0 | cmVhZCBib29r"), StandardCharsets.UTF_8);
         Storage storage = new Storage(dataFile);
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(1, loaded.size());
-        assertEquals("read book", loaded.get(0).getDescription());
-        assertEquals(Priority.NONE, loaded.get(0).getPriority());
+        assertEquals(1, loadedTasks.size());
+        assertEquals("read book", loadedTasks.get(0).getDescription());
+        assertEquals(Priority.NONE, loadedTasks.get(0).getPriority());
         assertEquals(3, storage.getSkippedLineCount());
     }
 
@@ -184,13 +184,13 @@ class StorageTest {
                 "T | 0 | cmVhZCBub3Rlcw"), StandardCharsets.UTF_8);
         Storage storage = new Storage(dataFile);
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(2, loaded.size());
-        assertEquals("write code", loaded.get(0).getDescription());
-        assertEquals(Priority.HIGH, loaded.get(0).getPriority());
-        assertEquals("read notes", loaded.get(1).getDescription());
-        assertEquals(Priority.NONE, loaded.get(1).getPriority());
+        assertEquals(2, loadedTasks.size());
+        assertEquals("write code", loadedTasks.get(0).getDescription());
+        assertEquals(Priority.HIGH, loadedTasks.get(0).getPriority());
+        assertEquals("read notes", loadedTasks.get(1).getDescription());
+        assertEquals(Priority.NONE, loadedTasks.get(1).getPriority());
         assertEquals(1, storage.getSkippedLineCount());
     }
 
@@ -203,10 +203,10 @@ class StorageTest {
                 "T | 1 | UkVBRCBCT09L | HIGH"), StandardCharsets.UTF_8);
         Storage storage = new Storage(dataFile);
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(1, loaded.size());
-        assertEquals("read book", loaded.get(0).getDescription());
+        assertEquals(1, loadedTasks.size());
+        assertEquals("read book", loadedTasks.get(0).getDescription());
         assertEquals(1, storage.getSkippedLineCount());
     }
 
@@ -219,9 +219,9 @@ class StorageTest {
         storage.load();
         Files.writeString(dataFile, "T | 0 | cmVhZCBib29r", StandardCharsets.UTF_8);
 
-        ArrayList<Task> loaded = storage.load();
+        ArrayList<Task> loadedTasks = storage.load();
 
-        assertEquals(1, loaded.size());
+        assertEquals(1, loadedTasks.size());
         assertEquals(0, storage.getSkippedLineCount());
     }
 
