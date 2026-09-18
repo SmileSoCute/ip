@@ -26,7 +26,7 @@ public class Storage {
     /**
      * Creates a storage manager that reads and writes the given file.
      *
-     * @param dataFile path of the task data file
+     * @param dataFile path of the task data file.
      */
     public Storage(Path dataFile) {
         this.dataFile = dataFile;
@@ -35,7 +35,7 @@ public class Storage {
     /**
      * Returns the number of malformed lines skipped by the latest load.
      *
-     * @return number of skipped malformed records
+     * @return number of skipped malformed records.
      */
     public int getSkippedLineCount() {
         return skippedLineCount;
@@ -44,8 +44,8 @@ public class Storage {
     /**
      * Loads valid tasks, skipping blank and malformed lines.
      *
-     * @return tasks successfully read from the data file
-     * @throws IOException if the data file cannot be read
+     * @return tasks successfully read from the data file.
+     * @throws IOException if the data file cannot be read.
      */
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -75,8 +75,8 @@ public class Storage {
     /**
      * Replaces the data file with the current task list, using an atomic move where supported.
      *
-     * @param tasks tasks to persist
-     * @throws IOException if the temporary or final data file cannot be written
+     * @param tasks tasks to persist.
+     * @throws IOException if the temporary or final data file cannot be written.
      */
     public void save(ArrayList<Task> tasks) throws IOException {
         Path parentDirectory = dataFile.getParent();
@@ -100,9 +100,9 @@ public class Storage {
     /**
      * Converts a task to an unambiguous, delimiter-safe storage record.
      *
-     * @param task task to serialize
-     * @return serialized task record
-     * @throws IllegalArgumentException if the task type is unsupported
+     * @param task task to serialize.
+     * @return serialized task record.
+     * @throws IllegalArgumentException if the task type is unsupported.
      */
     private String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
@@ -126,9 +126,9 @@ public class Storage {
     /**
      * Parses either the current structured format or the legacy display format.
      *
-     * @param line non-blank record from the data file
-     * @return parsed task
-     * @throws IllegalArgumentException if the record is malformed
+     * @param line non-blank record from the data file.
+     * @return parsed task.
+     * @throws IllegalArgumentException if the record is malformed.
      */
     private Task parseTask(String line) {
         if (line.startsWith("[")) {
@@ -174,9 +174,9 @@ public class Storage {
     /**
      * Parses a record written in Pathfinder's previous display-based format.
      *
-     * @param line legacy task record
-     * @return parsed task
-     * @throws IllegalArgumentException if the record is malformed
+     * @param line legacy task record.
+     * @return parsed task.
+     * @throws IllegalArgumentException if the record is malformed.
      */
     private Task parseLegacyTask(String line) {
         if (line.length() < 8 || line.charAt(0) != '[' || line.charAt(2) != ']'
@@ -202,9 +202,9 @@ public class Storage {
     /**
      * Parses the description and due date from a legacy deadline record.
      *
-     * @param details portion of the record following its task markers
-     * @return parsed deadline task
-     * @throws IllegalArgumentException if the legacy details are malformed
+     * @param details portion of the record following its task markers.
+     * @return parsed deadline task.
+     * @throws IllegalArgumentException if the legacy details are malformed.
      */
     private DeadlineTask parseLegacyDeadline(String details) {
         int byIndex = details.lastIndexOf(" (by: ");
@@ -219,9 +219,9 @@ public class Storage {
     /**
      * Parses the description and time range from a legacy event record.
      *
-     * @param details portion of the record following its task markers
-     * @return parsed event task
-     * @throws IllegalArgumentException if the legacy details are malformed
+     * @param details portion of the record following its task markers.
+     * @return parsed event task.
+     * @throws IllegalArgumentException if the legacy details are malformed.
      */
     private EventTask parseLegacyEvent(String details) {
         int fromIndex = details.lastIndexOf(" (from: ");
@@ -242,8 +242,8 @@ public class Storage {
     /**
      * Encodes task text so separators in user input cannot corrupt the file format.
      *
-     * @param text text to encode
-     * @return URL-safe Base64 text without padding
+     * @param text text to encode.
+     * @return URL-safe Base64 text without padding.
      */
     private String encode(String text) {
         return Base64.getUrlEncoder().withoutPadding()
@@ -253,9 +253,9 @@ public class Storage {
     /**
      * Decodes one required, non-empty storage field.
      *
-     * @param encoded URL-safe Base64 field
-     * @return decoded non-blank text
-     * @throws IllegalArgumentException if the field is not valid Base64 or is blank
+     * @param encoded URL-safe Base64 field.
+     * @return decoded non-blank text.
+     * @throws IllegalArgumentException if the field is not valid Base64 or is blank.
      */
     private String decodeRequired(String encoded) {
         try {
@@ -269,9 +269,9 @@ public class Storage {
     /**
      * Validates that stored text contains a non-whitespace value.
      *
-     * @param text text to validate
-     * @return the original validated text
-     * @throws IllegalArgumentException if the text is blank
+     * @param text text to validate.
+     * @return the original validated text.
+     * @throws IllegalArgumentException if the text is blank.
      */
     private String requireText(String text) {
         if (text.isBlank()) {
@@ -283,7 +283,7 @@ public class Storage {
     /**
      * Checks that a record contains exactly the fields required by its task type.
      *
-     * @param fields fields parsed from the record
+     * @param fields fields parsed from the record.
      * @param expectedCounts permitted numbers of fields.
      * @throws IllegalArgumentException if the field count is not permitted.
      */

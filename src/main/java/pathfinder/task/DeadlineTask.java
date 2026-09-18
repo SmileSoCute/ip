@@ -22,7 +22,7 @@ public class DeadlineTask extends Task {
     /**
      * Returns the deadline date and time.
      *
-     * @return the deadline date and time
+     * @return the deadline date and time.
      */
     public LocalDateTime getBy() {
         return dueDateTime;
@@ -43,7 +43,7 @@ public class DeadlineTask extends Task {
     /**
      * Returns this task with its deadline type marker and formatted due date.
      *
-     * @return the user-facing deadline representation
+     * @return the user-facing deadline representation.
      */
     @Override
     public String toString() {

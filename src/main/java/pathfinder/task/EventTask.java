@@ -25,7 +25,7 @@ public class EventTask extends Task {
     /**
      * Returns the event's starting date and time.
      *
-     * @return the event start
+     * @return the event start.
      */
     public LocalDateTime getFrom() {
         return startDateTime;
@@ -34,7 +34,7 @@ public class EventTask extends Task {
     /**
      * Returns the event's ending date and time.
      *
-     * @return the event end
+     * @return the event end.
      */
     public LocalDateTime getTo() {
         return endDateTime;
@@ -56,7 +56,7 @@ public class EventTask extends Task {
     /**
      * Returns this task with its event type marker and formatted time range.
      *
-     * @return the user-facing event representation
+     * @return the user-facing event representation.
      */
     @Override
     public String toString() {

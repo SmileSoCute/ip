@@ -32,7 +32,7 @@ public class Task {
     /**
      * Returns whether this task has been completed.
      *
-     * @return {@code true} if the task is complete, otherwise {@code false}
+     * @return {@code true} if the task is complete, otherwise {@code false}.
      */
     public boolean isDone() {
         return isDone;
@@ -82,7 +82,7 @@ public class Task {
     /**
      * Returns this task's description.
      *
-     * @return the task description
+     * @return the task description.
      */
     public String getDescription() {
         return this.description;

@@ -36,9 +36,9 @@ public final class DateTimeParser {
     /**
      * Parses supported ISO or day/month/year input, using midnight when time is omitted.
      *
-     * @param text date or date-time entered by the user
-     * @return parsed date and time
-     * @throws PathfinderException if the value does not match a supported format
+     * @param text date or date-time entered by the user.
+     * @return parsed date and time.
+     * @throws PathfinderException if the value does not match a supported format.
      */
     public static LocalDateTime parseInput(String text) throws PathfinderException {
         for (DateTimeFormatter formatter : INPUT_DATE_TIME_FORMATTERS) {
@@ -64,9 +64,9 @@ public final class DateTimeParser {
     /**
      * Parses the ISO value used in Pathfinder's current storage format.
      *
-     * @param text stored ISO date-time
-     * @return parsed date and time
-     * @throws IllegalArgumentException if the stored value is invalid
+     * @param text stored ISO date-time.
+     * @return parsed date and time.
+     * @throws IllegalArgumentException if the stored value is invalid.
      */
     public static LocalDateTime parseStored(String text) {
         try {
@@ -79,9 +79,9 @@ public final class DateTimeParser {
     /**
      * Parses a date from a legacy display-based data file.
      *
-     * @param text date-time from a legacy task record
-     * @return parsed date and time
-     * @throws IllegalArgumentException if the legacy value is invalid
+     * @param text date-time from a legacy task record.
+     * @return parsed date and time.
+     * @throws IllegalArgumentException if the legacy value is invalid.
      */
     public static LocalDateTime parseLegacy(String text) {
         try {
@@ -98,8 +98,8 @@ public final class DateTimeParser {
     /**
      * Formats a date and time for chatbot output.
      *
-     * @param dateTime date and time to format
-     * @return user-friendly date-time text
+     * @param dateTime date and time to format.
+     * @return user-friendly date-time text.
      */
     public static String formatDisplay(LocalDateTime dateTime) {
         return dateTime.format(DISPLAY_DATE_TIME);
@@ -108,8 +108,8 @@ public final class DateTimeParser {
     /**
      * Formats a date and time for unambiguous storage.
      *
-     * @param dateTime date and time to format
-     * @return ISO local date-time text
+     * @param dateTime date and time to format.
+     * @return ISO local date-time text.
      */
     public static String formatStored(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);

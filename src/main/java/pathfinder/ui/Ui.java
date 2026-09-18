@@ -16,7 +16,7 @@ public class Ui {
     /**
      * Returns whether another line of console input is available.
      *
-     * @return {@code true} if another line can be read, otherwise {@code false}
+     * @return {@code true} if another line can be read, otherwise {@code false}.
      */
     public boolean hasNextInput() {
         return scanner.hasNextLine();
@@ -25,7 +25,7 @@ public class Ui {
     /**
      * Reads and trims the next line of console input.
      *
-     * @return trimmed input line
+     * @return trimmed input line.
      */
     public String readInput() {
         return scanner.nextLine().trim();
@@ -46,7 +46,7 @@ public class Ui {
     /**
      * Displays one or more response lines between separator lines.
      *
-     * @param messages response lines to display
+     * @param messages response lines to display.
      */
     public void showMessage(String... messages) {
         System.out.println(SEPARATOR);
