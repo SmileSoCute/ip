@@ -27,10 +27,11 @@ public class MainWindow extends AnchorPane {
     private final Image pathfinderImage = new Image(getClass().getResourceAsStream("/images/DaDuke.png"));
     private Pathfinder pathfinder;
 
-    /** Configures scrolling after the FXML controls have been injected. */
+    /** Configures automatic scrolling after the FXML controls have been injected. */
     @FXML
     public void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) ->
+                scrollPane.setVvalue(scrollPane.getVmax()));
     }
 
     /**
